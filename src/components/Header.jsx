@@ -56,17 +56,18 @@ const practiceAreas = [
 ];
 
 const navLinks = [
+  
   {
-    label: "About Us",
-    href: "/about",
-  },
-  {
-    label: "Resources",
-    href: "/resources",
+    label: "Articles",
+    href: "/articles",
   },
   {
     label: "Contact",
     href: "/contact",
+  },
+  {
+    label: "About Us",
+    href: "/#about",
   },
 ];
 
@@ -343,7 +344,7 @@ export default function Header() {
             {/* NORMAL LINKS */}
 
             {navLinks.map((item) => (
-              <Link key={item.label} href={item.href} className="desktop-nav-item group relative px-4 py-3 text-[13px] font-medium text-[#303030] transition-colors duration-300 hover:text-[#A88448]">
+              <Link key={item.label} href={item.href} className="desktop-nav-item group relative px-4 py-3 text-[16px] font-medium text-[#303030] transition-colors duration-300 hover:text-[#A88448]">
                 {item.label}
 
                 <span className="absolute bottom-1 left-4 right-4 h-px origin-left scale-x-0 bg-[#A88448] transition-transform duration-500 group-hover:scale-x-100" />

@@ -1,1075 +1,699 @@
-"use client";
 
-import { useState } from "react";
+"use client";
+import Link from "next/link";
+
 import {
+    ArrowDownRight,
     ArrowRight,
     ArrowUpRight,
-    BarChart3,
+    BadgeCheck,
+    BriefcaseBusiness,
     Check,
+    ChevronDown,
+    Clock3,
+    FileText,
+    HeartHandshake,
+    Landmark,
+    LockKeyhole,
+    Menu,
     MessageCircle,
     Phone,
-    QrCode,
+    Scale,
     ShieldCheck,
     Sparkles,
-    Star,
-    ThumbsUp,
-    TrendingUp,
     Users,
+    X,
 } from "lucide-react";
+import { useState } from "react";
 
 const PHONE_NUMBER = "+918766311237";
 const DISPLAY_PHONE = "+91 8766311237";
-const WHATSAPP_URL = `https://wa.me/${PHONE_NUMBER.replace("+", "")}`;
+const WHATSAPP_URL = `https://wa.me/${PHONE_NUMBER.replace(/\D/g, "")}`;
 
-const LandingPageSEOContent = () => {
-    const workflow = [
-        {
-            number: "01",
-            icon: QrCode,
-            title: "Create your business QR",
-            description:
-                "Set up your ReviewFlow (Powered By Kaaf11.com) profile and get a dedicated QR code that customers can scan after visiting or using your business.",
-        },
-        {
-            number: "02",
-            icon: Users,
-            title: "Customers scan & respond",
-            description:
-                "Place the QR code at your counter, table, reception, packaging, invoice, or anywhere customers interact with your business.",
-        },
-        {
-            number: "03",
-            icon: Star,
-            title: "Customers share their experience",
-            description:
-                "Customers can quickly rate their experience and leave genuine feedback about the service, product, staff, or overall visit.",
-        },
-        {
-            number: "04",
-            icon: TrendingUp,
-            title: "Improve & grow",
-            description:
-                "Use customer feedback to discover problems, improve your service, encourage genuine public reviews, and build a stronger local reputation.",
-        },
-    ];
+const practiceAreas = [
+    {
+        number: "01",
+        icon: HeartHandshake,
+        title: "Divorce & Separation",
+        description:
+            "Understand the legal process, available options, documentation, and important considerations when navigating separation.",
+        tags: ["Divorce", "Separation"],
+    },
+    {
+        number: "02",
+        icon: Users,
+        title: "Mutual Consent Divorce",
+        description:
+            "Learn about eligibility, settlement discussions, documentation, and the general procedure for mutual consent divorce in India.",
+        tags: ["Family law", "Legal guidance"],
+    },
+    {
+        number: "03",
+        icon: Landmark,
+        title: "Court Marriage",
+        description:
+            "Get guidance on marriage registration, applicable legal requirements, documents, notices, and the relevant procedure.",
+        tags: ["Marriage", "Registration"],
+    },
+    {
+        number: "04",
+        icon: ShieldCheck,
+        title: "Live-in Relationships",
+        description:
+            "Understand relevant legal rights, protections, responsibilities, and available remedies based on your circumstances.",
+        tags: ["Rights", "Protection"],
+    },
+    {
+        number: "05",
+        icon: BriefcaseBusiness,
+        title: "Family Disputes",
+        description:
+            "Explore legal options for family disagreements, maintenance matters, child-related issues, and related proceedings.",
+        tags: ["Family matters", "Resolution"],
+    },
+    {
+        number: "06",
+        icon: Scale,
+        title: "Other Legal Matters",
+        description:
+            "Discuss your situation and understand whether your matter requires a different legal specialist or area of practice.",
+        tags: ["Consultation", "Next steps"],
+    },
+];
 
-    const features = [
-        {
-            icon: QrCode,
-            number: "01",
-            title: "One simple QR code",
-            description:
-                "Give customers one easy place to start their feedback journey. Display your QR code wherever customer interactions happen.",
-        },
-        {
-            icon: Star,
-            number: "02",
-            title: "Customer ratings",
-            description:
-                "Let customers quickly tell you how their experience went without forcing them through a complicated process.",
-        },
-        {
-            icon: TrendingUp,
-            number: "03",
-            title: "Built for local growth",
-            description:
-                "Turn customer experience into an ongoing growth process that helps your business earn trust and attract more potential customers.",
-        },
-    ];
+const processSteps = [
+    {
+        number: "01",
+        title: "Tell us about your matter",
+        description:
+            "Share a brief overview of your concern and the type of legal assistance you are looking for.",
+        icon: MessageCircle,
+    },
+    {
+        number: "02",
+        title: "Discuss your options",
+        description:
+            "Speak with a legal professional about the relevant facts, possible approaches, and applicable legal considerations.",
+        icon: Users,
+    },
+    {
+        number: "03",
+        title: "Understand the next steps",
+        description:
+            "Clarify documentation, likely procedures, timelines, and the appropriate next actions for your circumstances.",
+        icon: FileText,
+    },
+    {
+        number: "04",
+        title: "Move forward with clarity",
+        description:
+            "Make informed decisions with a clearer understanding of your options and the process ahead.",
+        icon: ArrowUpRight,
+    },
+];
 
-    const benefits = [
-        {
-            number: "01",
-            title: "Make it easier for customers to respond",
-            description:
-                "Give customers a simple way to share their experience after visiting your business, without complicated forms or lengthy steps.",
-        },
-        {
-            number: "02",
-            title: "Understand what customers really think",
-            description:
-                "Collect useful feedback about your service, products, staff, waiting time, and overall customer experience.",
-        },
-        {
-            number: "03",
-            title: "Find opportunities to improve",
-            description:
-                "Spot common concerns, recurring issues, and areas where your business can create a better experience for customers.",
-        },
-        {
-            number: "04",
-            title: "Build better customer experiences",
-            description:
-                "Use real customer insights to make informed improvements, strengthen customer relationships, and deliver a better experience over time.",
-        },
-    ];
+const benefits = [
+    {
+        icon: LockKeyhole,
+        title: "Respect for confidentiality",
+        description:
+            "Sensitive family and personal matters deserve careful handling and appropriate privacy safeguards.",
+    },
+    {
+        icon: FileText,
+        title: "Clear legal explanations",
+        description:
+            "Understand legal terminology, relevant documents, procedures, and important questions before proceeding.",
+    },
+    {
+        icon: HeartHandshake,
+        title: "A considered approach",
+        description:
+            "Explore appropriate options based on your circumstances instead of relying on assumptions or generic advice.",
+    },
+    {
+        icon: Clock3,
+        title: "Understand the process",
+        description:
+            "Learn about procedural stages, possible delays, and the factors that may influence your matter.",
+    },
+];
 
-    const businessTypes = [
-        {
-            title: "Restaurants & Cafes",
-            description:
-                "Collect feedback about food, service, staff, waiting time, cleanliness, atmosphere, and the overall dining experience.",
-        },
-        {
-            title: "Salons & Beauty",
-            description:
-                "Make it simple for customers to share feedback after hair, beauty, spa, grooming, or other personal-care services.",
-        },
-        {
-            title: "Retail & Local Shops",
-            description:
-                "Understand what customers think about products, staff, pricing, availability, service, and their shopping experience.",
-        },
-        {
-            title: "Home Services",
-            description:
-                "Collect feedback after plumbing, electrical, cleaning, repair, installation, maintenance, and other local services.",
-        },
-        {
-            title: "Agencies & Professionals",
-            description:
-                "Create a structured feedback process for clients and understand satisfaction with communication, delivery, and service quality.",
-        },
-        {
-            title: "Clinics & Healthcare",
-            description:
-                "Provide patients and visitors with a convenient channel to share feedback about their overall experience.",
-        },
-    ];
+const legalInsights = [
+    {
+        category: "DIVORCE & FAMILY LAW",
+        readTime: "6 min read",
+        title: "Mutual Consent Divorce in India: Process, Documents and Important Considerations",
+        description:
+            "Learn the general stages of mutual consent divorce, the importance of a settlement, essential documents, and why individual circumstances matter.",
+        points: [
+            "Basic legal requirements",
+            "Documents to prepare",
+            "Settlement and court procedure",
+        ],
+    },
+    {
+        category: "MARRIAGE & REGISTRATION",
+        readTime: "5 min read",
+        title: "Court Marriage in India: Documents, Eligibility and Legal Procedure",
+        description:
+            "Understand the difference between marriage registration and marriage under the Special Marriage Act, along with common documentation questions.",
+        points: [
+            "Applicable marriage laws",
+            "Notice and documentation",
+            "Questions to clarify before applying",
+        ],
+    },
+    {
+        category: "PERSONAL RIGHTS",
+        readTime: "5 min read",
+        title: "Live-in Relationships in India: Understanding Your Legal Rights",
+        description:
+            "Explore general legal considerations surrounding adult relationships, protection from abuse, and circumstances in which legal advice may be important.",
+        points: [
+            "Legal context and eligibility",
+            "Available legal protections",
+            "When to seek individual advice",
+        ],
+    },
+];
 
-    const scrollToHowItWorks = () => {
-        document.getElementById("how-it-works")?.scrollIntoView({
-            behavior: "smooth",
-        });
-    };
+const faqs = [
+    {
+        question: "How can I book a legal consultation?",
+        answer:
+            "Use the consultation button, call the listed number, or contact us on WhatsApp. Briefly explain your legal concern so the appropriate next step can be discussed.",
+    },
+    {
+        question: "What information should I prepare before a consultation?",
+        answer:
+            "Prepare a short timeline of events, the main questions you need answered, and a list of relevant documents. Share sensitive documents only through an appropriate and secure channel.",
+    },
+    {
+        question: "Can I get advice about mutual consent divorce?",
+        answer:
+            "You can seek guidance about the general procedure, applicable legal requirements, settlement considerations, documentation, and court process. The appropriate advice depends on your individual circumstances.",
+    },
+    {
+        question: "What documents are required for court marriage?",
+        answer:
+            "Requirements depend on the applicable law, personal circumstances, and the relevant marriage officer. Identity and age proof, address proof, photographs, and other prescribed documents may be required. Confirm the current local requirements before applying.",
+    },
+    {
+        question: "How long does a divorce or court marriage take?",
+        answer:
+            "There is no single timeline for every matter. The applicable law, statutory requirements, court schedules, documentation, and individual circumstances can affect the time involved.",
+    },
+    {
+        question: "Will my personal information remain confidential?",
+        answer:
+            "Sensitive legal matters should be handled with appropriate confidentiality safeguards. Ask about information handling before sharing documents or personal details. Do not send highly sensitive information through an unsecured channel.",
+    },
+    {
+        question: "Does contacting your team automatically create an advocate-client relationship?",
+        answer:
+            "Not necessarily. The nature of any professional relationship, scope of work, fees, and engagement terms should be confirmed directly before relying on legal representation.",
+    },
+    {
+        question: "Can I get legal help if I am outside your city?",
+        answer:
+            "Possibly. Availability depends on the type of matter, applicable jurisdiction, professional requirements, and whether in-person court appearances or local representation are necessary.",
+    },
+];
+
+function SectionLabel({ children, dark = false }) {
+    return (
+        <span
+            className={`inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] ${dark ? "text-[#D0B16F]" : "text-[#9D7D3E]"
+                }`}
+        >
+            <span className="h-px w-7 bg-current" />
+            {children}
+        </span>
+    );
+}
+
+function SectionHeading({ eyebrow, title, highlight, description, dark = false }) {
+    return (
+        <div className="mx-auto max-w-3xl text-center">
+            <SectionLabel dark={dark}>{eyebrow}</SectionLabel>
+            <h2
+                className={`mt-5 text-3xl font-semibold leading-[1.12] tracking-[-0.045em] sm:text-4xl lg:text-[48px] ${dark ? "text-white" : "text-[#171717]"
+                    }`}
+            >
+                {title}{" "}
+                {highlight && (
+                    <span className="font-serif italic font-medium text-[#C6A665]">
+                        {highlight}
+                    </span>
+                )}
+            </h2>
+            {description && (
+                <p
+                    className={`mx-auto mt-5 max-w-2xl text-sm leading-7 sm:text-base ${dark ? "text-white/60" : "text-[#77736C]"
+                        }`}
+                >
+                    {description}
+                </p>
+            )}
+        </div>
+    );
+}
+
+function ContactActions({ compact = false }) {
+    return (
+        <div className="flex flex-col gap-3 sm:flex-row">
+            <a
+                href={`tel:${PHONE_NUMBER}`}
+                className={`inline-flex min-h-12 items-center justify-center gap-2 bg-[#C6A665] px-6 text-xs font-bold text-[#171717] transition hover:bg-[#D6BC84] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C6A665] ${compact ? "rounded-lg" : "rounded-sm"
+                    }`}
+            >
+                <Phone size={15} />
+                Book a consultation
+                <ArrowRight size={15} />
+            </a>
+            <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex min-h-12 items-center justify-center gap-2 border border-white/20 px-6 text-xs font-semibold text-white transition hover:border-[#C6A665] hover:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C6A665] ${compact ? "rounded-lg" : "rounded-sm"
+                    }`}
+            >
+                <MessageCircle size={16} />
+                WhatsApp us
+                <ArrowUpRight size={15} />
+            </a>
+        </div>
+    );
+}
+
+export default function LandingPageSEOContent() {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [openFaq, setOpenFaq] = useState(0);
+
+    const closeMenu = () => setMobileMenuOpen(false);
 
     return (
-        <>
-            <section className="w-full overflow-hidden bg-[#F8F7F4] text-[#171715]">
+        <main className="min-h-screen overflow-x-clip bg-[#F6F5F2] font-sans text-[#171717] selection:bg-[#C6A665]/30">
 
-                {/* =========================================================
-                    HOW IT WORKS
-                ========================================================= */}
-
-                <section
-                    id="how-it-works"
-                    className="relative border-y border-black/[0.07] bg-[#F8F7F4]"
-                >
-                    <div
-                        className="
-                            pointer-events-none absolute inset-0 opacity-[0.25]
-                            [background-image:linear-gradient(rgba(23,23,21,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(23,23,21,0.035)_1px,transparent_1px)]
-                            [background-size:70px_70px]
-                            [mask-image:linear-gradient(to_bottom,black,transparent_90%)]
-                        "
-                    />
-
-                    <div className="pointer-events-none absolute left-1/2 top-32 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-[#B59A63]/[0.035] blur-3xl" />
-
-                    <div className="relative mx-auto max-w-[1280px] px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28 xl:px-0">
-
-                        <div className="grid items-center gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
-
-                            {/* LEFT */}
-                            <div>
-
-                                <div className="inline-flex items-center gap-2 rounded-full border border-[#B59A63]/20 bg-white/70 px-3.5 py-2 shadow-[0_4px_20px_rgba(23,23,21,0.035)]">
-                                    <Sparkles size={13} className="text-[#B59A63]" />
-
-                                    <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#77746D]">
-                                        How it works
-                                    </span>
-                                </div>
-
-                                <h2 className="mt-6 max-w-[650px] text-[36px] font-semibold leading-[1.02] tracking-[-0.05em] sm:text-[48px] lg:text-[56px]">
-                                    One simple way to{" "}
-                                    <span className="text-[#B59A63]">
-                                        listen, improve, and grow.
-                                    </span>
-                                </h2>
-
-                                <p className="mt-6 max-w-[560px] text-[15px] leading-7 text-[#77746D] sm:text-[16px]">
-                                    ReviewFlow (Powered By Kaaf11.com) gives local businesses a simple
-                                    way to connect customers with feedback,
-                                    understand their experience, manage their
-                                    reputation, and continuously improve the
-                                    way they serve their customers.
-                                </p>
-
-                                <div className="mt-8 flex flex-wrap gap-2.5">
-                                    {[
-                                        "QR feedback",
-                                        "Customer ratings",
-                                        "Review management"
-                                    ].map((item) => (
-                                        <span
-                                            key={item}
-                                            className="rounded-full border border-black/[0.08] bg-white px-3.5 py-2 text-[11px] font-medium text-[#66635C] shadow-[0_3px_12px_rgba(23,23,21,0.025)]"
-                                        >
-                                            {item}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <button
-                                    type="button"
-                                    onClick={scrollToHowItWorks}
-                                    className="group mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-[#171715] px-5 text-[12px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
-                                >
-                                    See the workflow
-
-                                    <ArrowRight
-                                        size={15}
-                                        className="transition-transform duration-300 group-hover:translate-x-1"
-                                    />
-                                </button>
-
-                            </div>
-
-                            {/* RIGHT WORKFLOW CARD */}
-                            <div className="relative">
-
-                                <div className="absolute -inset-8 rounded-[40px] bg-[#B59A63]/[0.045] blur-3xl" />
-
-                                <div className="relative overflow-hidden rounded-[26px] border border-black/[0.08] bg-white shadow-[0_30px_80px_rgba(23,23,21,0.10)]">
-
-                                    <div className="flex items-center justify-between border-b border-black/[0.07] bg-[#FBFAF8] px-5 py-4 sm:px-6">
-
-                                        <div>
-                                            <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-[#A19E96]">
-                                                Customer journey
-                                            </p>
-
-                                            <p className="mt-1 text-[15px] font-semibold tracking-[-0.02em] text-[#171715]">
-                                                From QR scan to better business
-                                            </p>
-                                        </div>
-
-                                        <div className="rounded-lg border border-black/[0.06] bg-white px-3 py-1.5 text-[9px] font-semibold text-[#77746D]">
-                                            ReviewFlow (Powered By Kaaf11.com)
-                                        </div>
-
-                                    </div>
-
-                                    <div className="p-5 sm:p-7">
-
-                                        {workflow.map((step, index) => {
-                                            const Icon = step.icon;
-
-                                            return (
-                                                <div
-                                                    key={step.number}
-                                                    className="relative flex gap-4"
-                                                >
-
-                                                    {index !== workflow.length - 1 && (
-                                                        <div className="absolute left-[19px] top-11 h-[calc(100%-11px)] w-px bg-black/[0.08]" />
-                                                    )}
-
-                                                    <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#B59A63]/20 bg-[#F8F7F4] text-[#B59A63]">
-                                                        <Icon size={17} strokeWidth={1.8} />
-                                                    </div>
-
-                                                    <div className="pb-8">
-
-                                                        <div className="flex items-center gap-2">
-
-                                                            <span className="text-[9px] font-bold tracking-[0.15em] text-[#B59A63]">
-                                                                {step.number}
-                                                            </span>
-
-                                                            <h3 className="text-[14px] font-semibold tracking-[-0.015em] text-[#171715]">
-                                                                {step.title}
-                                                            </h3>
-
-                                                        </div>
-
-                                                        <p className="mt-2 max-w-[520px] text-[12.5px] leading-5 text-[#77746D]">
-                                                            {step.description}
-                                                        </p>
-
-                                                    </div>
-
-                                                </div>
-                                            );
-                                        })}
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-
-                {/* =========================================================
-                    CORE VALUE
-                ========================================================= */}
-
-                <section className="bg-white">
-
-                    <div className="mx-auto max-w-[1280px] px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28 xl:px-0">
-
-                        <div className="mx-auto max-w-[850px] text-center">
-
-                            <span className="inline-flex items-center rounded-full border border-[#B59A63]/20 bg-[#F8F7F4] px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#77746D]">
-                                Customer feedback & reputation
+            {/* INTRODUCTION */}
+            <section id="about" className="bg-[#F8F7F4]">
+                <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-20 lg:px-12 lg:py-28 xl:px-16">
+                    <div>
+                        <SectionLabel>About our approach</SectionLabel>
+                        <h2 className="mt-5 max-w-xl text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl lg:text-[46px]">
+                            Legal matters deserve{" "}
+                            <span className="font-serif italic font-medium text-[#B39456]">
+                                clarity, not confusion.
                             </span>
-
-                            <h2 className="mt-6 text-[36px] font-semibold leading-[1.04] tracking-[-0.05em] sm:text-[48px] lg:text-[58px]">
-                                Your customers are already{" "}
-                                <span className="text-[#B59A63]">
-                                    talking about you.
-                                </span>
-                            </h2>
-
-                            <p className="mx-auto mt-6 max-w-[720px] text-[15px] leading-7 text-[#77746D] sm:text-[17px]">
-                                ReviewFlow (Powered By Kaaf11.com) helps you create a structured
-                                process for listening to those customers,
-                                understanding their experience, and turning
-                                their feedback into practical improvements.
-                            </p>
-
-                        </div>
-
-
-                        {/* VISUAL FLOW */}
-                        <div className="relative mt-16">
-
-                            <div className="hidden lg:block absolute left-[16.66%] right-[16.66%] top-[72px] h-px bg-black/[0.08]" />
-
-                            <div className="grid gap-6 lg:grid-cols-3">
-
-                                {/* CUSTOMER */}
-                                <div className="relative rounded-[24px] border border-black/[0.08] bg-[#FBFAF8] p-7 text-center">
-
-                                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[0_8px_25px_rgba(23,23,21,0.06)]">
-                                        <Users size={22} className="text-[#B59A63]" />
-                                    </div>
-
-                                    <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#B59A63]">
-                                        Customer
-                                    </p>
-
-                                    <h3 className="mt-2 text-[18px] font-semibold tracking-[-0.025em]">
-                                        Has an experience
-                                    </h3>
-
-                                    <p className="mt-3 text-[13px] leading-6 text-[#77746D]">
-                                        A customer visits your business,
-                                        purchases something, or receives your
-                                        service.
-                                    </p>
-
-                                </div>
-
-
-                                {/* FEEDBACK */}
-                                <div className="relative rounded-[24px] border border-[#B59A63]/20 bg-white p-7 text-center shadow-[0_15px_45px_rgba(23,23,21,0.055)]">
-
-                                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F8F7F4]">
-                                        <MessageCircle size={22} className="text-[#B59A63]" />
-                                    </div>
-
-                                    <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#B59A63]">
-                                        Feedback
-                                    </p>
-
-                                    <h3 className="mt-2 text-[18px] font-semibold tracking-[-0.025em]">
-                                        Shares their experience
-                                    </h3>
-
-                                    <p className="mt-3 text-[13px] leading-6 text-[#77746D]">
-                                        The customer scans your QR code and
-                                        gets a simple way to rate and explain
-                                        their experience.
-                                    </p>
-
-                                </div>
-
-
-                                {/* BUSINESS */}
-                                <div className="relative rounded-[24px] border border-black/[0.08] bg-[#171715] p-7 text-center text-white">
-
-                                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.07]">
-                                        <TrendingUp size={22} className="text-[#B59A63]" />
-                                    </div>
-
-                                    <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#B59A63]">
-                                        Business
-                                    </p>
-
-                                    <h3 className="mt-2 text-[18px] font-semibold tracking-[-0.025em]">
-                                        Learns & improves
-                                    </h3>
-
-                                    <p className="mt-3 text-[13px] leading-6 text-white/50">
-                                        You discover what customers like,
-                                        identify problems, and improve the
-                                        experience you provide.
-                                    </p>
-
-                                </div>
-
-                            </div>
-                        </div>
-
+                        </h2>
                     </div>
-                </section>
-
-
-                {/* =========================================================
-                    FEATURES
-                ========================================================= */}
-
-                <section
-                    id="features"
-                    className="border-y border-black/[0.07] bg-[#F8F7F4]"
-                >
-
-                    <div className="mx-auto max-w-[1280px] px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28 xl:px-0">
-
-                        <div className="grid items-end gap-8 lg:grid-cols-[0.8fr_1.2fr]">
-
-                            <div>
-
-                                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#B59A63]">
-                                    Everything in one workflow
-                                </span>
-
-                                <h2 className="mt-5 text-[35px] font-semibold leading-[1.04] tracking-[-0.05em] sm:text-[48px]">
-                                    Built to help local businesses{" "}
-                                    <span className="text-[#B59A63]">
-                                        grow smarter.
-                                    </span>
-                                </h2>
-
-                            </div>
-
-                            <p className="max-w-[620px] text-[14px] leading-7 text-[#77746D] sm:text-[15px]">
-                                From the first QR scan to ongoing customer
-                                improvement, ReviewFlow (Powered By Kaaf11.com) brings the important
-                                parts of your feedback workflow together in
-                                one simple system.
-                            </p>
-
-                        </div>
-
-
-                        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-                            {features.map((feature) => {
-                                const Icon = feature.icon;
-
-                                return (
-                                    <article
-                                        key={feature.number}
-                                        className="group relative overflow-hidden rounded-2xl border border-black/[0.08] bg-white p-6 shadow-[0_8px_30px_rgba(23,23,21,0.035)] transition-all duration-300 hover:-translate-y-1 hover:border-[#B59A63]/25 hover:shadow-[0_18px_45px_rgba(23,23,21,0.08)]"
-                                    >
-
-                                        <div className="flex items-center justify-between">
-
-                                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F7F4]">
-                                                <Icon
-                                                    size={18}
-                                                    strokeWidth={1.7}
-                                                    className="text-[#B59A63]"
-                                                />
-                                            </div>
-
-                                            <span className="text-[10px] font-semibold tracking-[0.15em] text-[#B2AEA5]">
-                                                {feature.number}
-                                            </span>
-
-                                        </div>
-
-                                        <h3 className="mt-7 text-[17px] font-semibold tracking-[-0.025em]">
-                                            {feature.title}
-                                        </h3>
-
-                                        <p className="mt-3 text-[13.5px] leading-6 text-[#77746D]">
-                                            {feature.description}
-                                        </p>
-
-                                        <div className="mt-6 h-px w-8 bg-[#B59A63]/40 transition-all duration-300 group-hover:w-14 group-hover:bg-[#B59A63]" />
-
-                                    </article>
-                                );
-                            })}
-
-                        </div>
+                    <div>
+                        <p className="text-sm leading-7 text-[#66635D] sm:text-base sm:leading-8">
+                            Legal questions often arise during important personal moments.
+                            Knowing which law applies, what documents are needed, and what
+                            steps come next can make the process easier to understand.
+                        </p>
+                        <p className="mt-4 text-sm leading-7 text-[#66635D] sm:text-base sm:leading-8">
+                            This website helps you explore common legal topics and connect
+                            about the assistance you may need. Every matter is different,
+                            and the appropriate course of action depends on the facts,
+                            applicable law, and jurisdiction.
+                        </p>
+                        <Link href="/contact" className="mt-6 inline-flex items-center gap-2 border-b border-[#B39456] pb-2 text-xs font-bold uppercase tracking-[0.08em] transition hover:text-[#9D7D3E]">
+                            Discuss your situation <ArrowRight size={15} />
+                        </Link>
                     </div>
-                </section>
-
-
-                {/* =========================================================
-                    NEGATIVE / POSITIVE FEEDBACK CONCEPT
-                ========================================================= */}
-
-                <section className="bg-white">
-
-                    <div className="mx-auto max-w-[1280px] px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28 xl:px-0">
-
-                        <div className="grid items-center gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
-
-                            <div>
-
-                                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#B59A63]">
-                                    Listen. Learn. Improve.
-                                </span>
-
-                                <h2 className="mt-5 text-[36px] font-semibold leading-[1.04] tracking-[-0.05em] sm:text-[48px]">
-                                    Every rating can tell you{" "}
-                                    <span className="text-[#B59A63]">
-                                        something useful.
-                                    </span>
-                                </h2>
-
-                                <p className="mt-6 max-w-[550px] text-[15px] leading-7 text-[#77746D]">
-                                    A high rating can show you what your
-                                    customers appreciate. A low rating can
-                                    reveal where the experience needs
-                                    attention. ReviewFlow (Powered By Kaaf11.com) helps you capture
-                                    both signals and turn them into action.
-                                </p>
-
-                                <div className="mt-8 space-y-3">
-
-                                    {[
-                                        "Understand customer satisfaction",
-                                        "Identify recurring service problems",
-                                        "Respond to customer concerns",
-                                        "Improve products and services",
-                                        "Build a stronger customer experience",
-                                    ].map((item) => (
-                                        <div
-                                            key={item}
-                                            className="flex items-center gap-3"
-                                        >
-                                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#F3EEE4]">
-                                                <Check
-                                                    size={13}
-                                                    className="text-[#A08A58]"
-                                                />
-                                            </div>
-
-                                            <span className="text-[13px] font-medium text-[#66635C]">
-                                                {item}
-                                            </span>
-                                        </div>
-                                    ))}
-
-                                </div>
-
-                            </div>
-
-
-                            <div className="relative">
-
-                                <div className="absolute -inset-8 rounded-[40px] bg-[#B59A63]/[0.045] blur-3xl" />
-
-                                <div className="relative overflow-hidden rounded-[28px] border border-black/[0.08] bg-[#FBFAF8] p-5 shadow-[0_30px_70px_rgba(23,23,21,0.08)] sm:p-7">
-
-                                    <div className="rounded-2xl border border-black/[0.07] bg-white p-6">
-
-                                        <div className="flex items-center justify-between">
-
-                                            <div>
-                                                <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#A19E96]">
-                                                    Customer feedback
-                                                </p>
-
-                                                <p className="mt-1 text-[15px] font-semibold">
-                                                    Recent experience
-                                                </p>
-                                            </div>
-
-                                            <div className="rounded-lg bg-[#F8F7F4] px-3 py-2 text-[10px] font-semibold text-[#77746D]">
-                                                Feedback
-                                            </div>
-
-                                        </div>
-
-
-                                        <div className="mt-7 flex items-center gap-2">
-
-                                            {[1, 2, 3, 4, 5].map((star) => (
-                                                <Star
-                                                    key={star}
-                                                    size={18}
-                                                    className={
-                                                        star <= 4
-                                                            ? "fill-[#B59A63] text-[#B59A63]"
-                                                            : "text-[#D8D4CC]"
-                                                    }
-                                                />
-                                            ))}
-
-                                            <span className="ml-2 text-[12px] font-semibold text-[#77746D]">
-                                                4 / 5
-                                            </span>
-
-                                        </div>
-
-
-                                        <div className="mt-6 rounded-xl border border-black/[0.06] bg-[#FBFAF8] p-4">
-
-                                            <p className="text-[12px] font-semibold text-[#171715]">
-                                                Customer feedback
-                                            </p>
-
-                                            <p className="mt-2 text-[12px] leading-5 text-[#77746D]">
-                                                "The service was good, but the
-                                                waiting time could be improved."
-                                            </p>
-
-                                        </div>
-
-
-                                        <div className="mt-5 grid grid-cols-2 gap-3">
-
-                                            <div className="rounded-xl border border-black/[0.06] bg-white p-4">
-
-                                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F3F8F3]">
-                                                    <ThumbsUp
-                                                        size={14}
-                                                        className="text-[#4D8A5A]"
-                                                    />
-                                                </div>
-
-                                                <p className="mt-3 text-[11px] font-semibold">
-                                                    What works
-                                                </p>
-
-                                                <p className="mt-1 text-[10px] leading-4 text-[#A19E96]">
-                                                    Service quality
-                                                </p>
-
-                                            </div>
-
-
-                                            <div className="rounded-xl border border-black/[0.06] bg-white p-4">
-
-                                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F3EEE4]">
-                                                    <TrendingUp
-                                                        size={14}
-                                                        className="text-[#A08A58]"
-                                                    />
-                                                </div>
-
-                                                <p className="mt-3 text-[11px] font-semibold">
-                                                    Improve
-                                                </p>
-
-                                                <p className="mt-1 text-[10px] leading-4 text-[#A19E96]">
-                                                    Waiting time
-                                                </p>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </section>
-
-
-                {/* =========================================================
-                    BENEFITS
-                ========================================================= */}
-
-                <section className="border-y border-black/[0.07] bg-[#FBFAF8]">
-
-                    <div className="mx-auto max-w-[1280px] px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28 xl:px-0">
-
-                        <div className="mx-auto max-w-[780px] text-center">
-
-                            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#B59A63]">
-                                Why businesses use it
-                            </span>
-
-                            <h2 className="mt-5 text-[35px] font-semibold leading-[1.04] tracking-[-0.05em] sm:text-[48px]">
-                                Don't just collect reviews.{" "}
-                                <span className="text-[#B59A63]">
-                                    Learn from customers.
-                                </span>
-                            </h2>
-
-                            <p className="mt-5 text-[14px] leading-7 text-[#77746D] sm:text-[16px]">
-                                A strong local reputation starts with a strong
-                                customer experience.
-                            </p>
-
-                        </div>
-
-
-                        <div className="mt-14 grid gap-4 md:grid-cols-2">
-
-                            {benefits.map((benefit) => (
-                                <article
-                                    key={benefit.number}
-                                    className="rounded-[22px] border border-black/[0.08] bg-white p-6 sm:p-7"
-                                >
-
-                                    <div className="flex items-start gap-5">
-
-                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#171715] text-[10px] font-semibold text-white">
-                                            {benefit.number}
-                                        </div>
-
-                                        <div>
-
-                                            <h3 className="text-[17px] font-semibold tracking-[-0.02em]">
-                                                {benefit.title}
-                                            </h3>
-
-                                            <p className="mt-3 text-[13.5px] leading-6 text-[#77746D]">
-                                                {benefit.description}
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-
-                                </article>
-                            ))}
-
-                        </div>
-
-                    </div>
-                </section>
-
-
-                {/* =========================================================
-                    BUSINESS TYPES
-                ========================================================= */}
-
-                <section className="relative overflow-hidden bg-[#171715] text-white">
-
-                    <div className="pointer-events-none absolute left-[10%] top-[-20%] h-[450px] w-[450px] rounded-full bg-[#B59A63]/[0.08] blur-[120px]" />
-
-                    <div className="pointer-events-none absolute bottom-[-20%] right-[5%] h-[400px] w-[400px] rounded-full bg-[#B59A63]/[0.06] blur-[110px]" />
-
-                    <div className="relative mx-auto max-w-[1280px] px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28 xl:px-0">
-
-                        <div className="mx-auto max-w-[780px] text-center">
-
-                            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#B59A63]">
-                                Built for local businesses
-                            </span>
-
-                            <h2 className="mt-5 text-[35px] font-semibold leading-[1.04] tracking-[-0.05em] sm:text-[48px]">
-                                Wherever customer experience{" "}
-                                <span className="text-[#B59A63]">
-                                    matters.
-                                </span>
-                            </h2>
-
-                            <p className="mx-auto mt-5 max-w-[680px] text-[14px] leading-7 text-white/55 sm:text-[16px]">
-                                Restaurants, salons, shops, clinics,
-                                professionals, agencies, and service
-                                businesses can use a simple QR-based workflow
-                                to stay closer to their customers.
-                            </p>
-
-                        </div>
-
-
-                        <div className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-
-                            {businessTypes.map((business) => (
-                                <article
-                                    key={business.title}
-                                    className="group rounded-2xl border border-white/[0.09] bg-white/[0.035] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#B59A63]/30 hover:bg-white/[0.055]"
-                                >
-
-                                    <div className="mb-6 flex items-center justify-between">
-
-                                        <div className="h-px w-8 bg-[#B59A63] transition-all duration-300 group-hover:w-12" />
-
-                                        <ArrowUpRight
-                                            size={15}
-                                            className="text-white/25 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#B59A63]"
-                                        />
-
-                                    </div>
-
-                                    <h3 className="text-[16px] font-semibold tracking-[-0.02em]">
-                                        {business.title}
-                                    </h3>
-
-                                    <p className="mt-2.5 text-[13px] leading-6 text-white/50">
-                                        {business.description}
-                                    </p>
-
-                                </article>
-                            ))}
-
-                        </div>
-
-                    </div>
-                </section>
-
-
-                {/* =========================================================
-                    LOCAL GROWTH MESSAGE
-                ========================================================= */}
-
-                <section className="bg-[#F8F7F4]">
-
-                    <div className="mx-auto max-w-[1280px] px-5 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-28 xl:px-0">
-
-                        <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
-
-                            <div>
-
-                                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#B59A63]">
-                                    From feedback to growth
-                                </span>
-
-                                <h2 className="mt-5 max-w-[700px] text-[36px] font-semibold leading-[1.03] tracking-[-0.05em] sm:text-[50px]">
-                                    Better customer experiences can create{" "}
-                                    <span className="text-[#B59A63]">
-                                        stronger local businesses.
-                                    </span>
-                                </h2>
-
-                                <p className="mt-6 max-w-[650px] text-[15px] leading-7 text-[#77746D] sm:text-[16px]">
-                                    When businesses consistently listen to
-                                    customers, they can identify problems
-                                    earlier, improve service quality, build
-                                    trust, and create experiences customers
-                                    are more likely to talk about.
-                                </p>
-
-                                <div className="mt-8 flex flex-wrap gap-3">
-
-                                    {[
-                                        "Listen to customers",
-                                        "Fix recurring problems",
-                                        "Improve service",
-                                        "Build trust",
-                                        "Grow locally",
-                                    ].map((item) => (
-                                        <div
-                                            key={item}
-                                            className="flex items-center gap-2 rounded-full border border-black/[0.07] bg-white px-3.5 py-2"
-                                        >
-
-                                            <Check
-                                                size={12}
-                                                className="text-[#B59A63]"
-                                            />
-
-                                            <span className="text-[11px] font-medium text-[#66635C]">
-                                                {item}
-                                            </span>
-
-                                        </div>
-                                    ))}
-
-                                </div>
-
-                            </div>
-
-
-                            <div className="relative">
-
-                                <div className="rounded-[28px] border border-black/[0.08] bg-white p-6 shadow-[0_25px_70px_rgba(23,23,21,0.08)] sm:p-8">
-
-                                    <div className="flex items-center justify-between">
-
-                                        <div>
-
-                                            <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[#A19E96]">
-                                                Growth loop
-                                            </p>
-
-                                            <p className="mt-1 text-[15px] font-semibold">
-                                                Customer experience
-                                            </p>
-
-                                        </div>
-
-                                        <TrendingUp
-                                            size={20}
-                                            className="text-[#B59A63]"
-                                        />
-
-                                    </div>
-
-
-                                    <div className="mt-8 space-y-3">
-
-                                        {[
-                                            ["01", "Customer visits", "A real customer interacts with your business."],
-                                            ["02", "Feedback collected", "Their experience becomes useful business information."],
-                                            ["03", "Problems improved", "You identify issues and improve the experience."],
-                                            ["04", "Trust grows", "Better experiences can lead to stronger customer relationships."],
-                                        ].map(([number, title, description]) => (
-                                            <div
-                                                key={number}
-                                                className="flex gap-4 rounded-xl border border-black/[0.06] bg-[#FBFAF8] p-4"
-                                            >
-
-                                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#171715] text-[9px] font-bold text-white">
-                                                    {number}
-                                                </div>
-
-                                                <div>
-
-                                                    <p className="text-[12px] font-semibold">
-                                                        {title}
-                                                    </p>
-
-                                                    <p className="mt-1 text-[10.5px] leading-4 text-[#A19E96]">
-                                                        {description}
-                                                    </p>
-
-                                                </div>
-
-                                            </div>
-                                        ))}
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                </section>
-
-
-                {/* =========================================================
-                    FINAL CTA
-                ========================================================= */}
-
-                <section className="bg-[#F8F7F4]">
-
-                    <div className="mx-auto max-w-[1280px] px-5 pb-16 sm:px-8 sm:pb-24 lg:px-10 lg:pb-28 xl:px-0">
-
-                        <div className="relative overflow-hidden rounded-[28px] bg-[#171715] px-6 py-14 text-center sm:px-12 sm:py-20">
-
-                            <div className="pointer-events-none absolute left-1/2 top-[-180px] h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-[#B59A63]/[0.10] blur-[100px]" />
-
-                            <div className="relative mx-auto max-w-[760px]">
-
-                                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-[#B59A63]/25 bg-[#B59A63]/10">
-                                    <Star
-                                        size={19}
-                                        className="text-[#B59A63]"
-                                    />
-                                </div>
-
-                                <span className="mt-6 block text-[10px] font-semibold uppercase tracking-[0.18em] text-[#B59A63]">
-                                    Build a better feedback process
-                                </span>
-
-                                <h2 className="mt-5 text-[34px] font-semibold leading-[1.04] tracking-[-0.05em] text-white sm:text-[48px]">
-                                    Give your customers a better way to{" "}
-                                    <span className="text-[#B59A63]">
-                                        be heard.
-                                    </span>
-                                </h2>
-
-                                <p className="mx-auto mt-5 max-w-[650px] text-[14px] leading-7 text-white/50 sm:text-[16px]">
-                                    Start turning customer feedback into
-                                    actionable insights, better experiences,
-                                    and a stronger local reputation.
-                                </p>
-
-                                <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-
-                                    <a
-                                        href={`tel:${PHONE_NUMBER}`}
-                                        className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[#B59A63] px-6 text-[12px] font-semibold text-[#171715] transition-all duration-300 hover:-translate-y-0.5"
-                                    >
-                                        Talk to us
-
-                                        <ArrowRight
-                                            size={15}
-                                            className="transition-transform duration-300 group-hover:translate-x-1"
-                                        />
-                                    </a>
-
-                                    <a
-                                        href={WHATSAPP_URL}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.05] px-6 text-[12px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.09]"
-                                        style={{color:"white"}}
-                                    >
-                                        WhatsApp us
-                                        <MessageCircle size={15} />
-                                    </a>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
+                </div>
             </section>
 
+            {/* PRACTICE AREAS */}
+            <section id="practice-areas" className="border-y border-black/[0.06] bg-white">
+                <div className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-28 xl:px-16">
+                    <SectionHeading
+                        eyebrow="Our practice areas"
+                        title="Find guidance for"
+                        highlight="what matters to you."
+                        description="Explore common legal matters, understand the questions worth asking, and identify an appropriate starting point for your consultation."
+                    />
 
-            {/* =============================================================
-                FIXED CONTACT ACTIONS
-            ============================================================= */}
+                    <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+                        {practiceAreas.map((area) => {
+                            const Icon = area.icon;
 
-            <div className="fixed bottom-5 right-5 z-[100] flex flex-col gap-2.5 sm:bottom-6 sm:right-6">
+                            return (
+                                <article
+                                    key={area.number}
+                                    className="group flex h-full flex-col border border-black/[0.08] bg-[#F8F7F4] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#C6A665]/60 hover:bg-white hover:shadow-[0_18px_45px_rgba(23,23,23,0.06)] sm:p-7"
+                                >
+                                    <div className="flex items-start justify-between">
+                                        <span className="flex h-12 w-12 items-center justify-center border border-[#C6A665]/30 bg-white text-[#A7874D] transition group-hover:bg-[#171717] group-hover:text-[#C6A665]">
+                                            <Icon size={21} strokeWidth={1.5} />
+                                        </span>
+                                        <span className="font-serif text-sm text-[#B9B3A8]">{area.number}</span>
+                                    </div>
+                                    <h3 className="mt-7 text-lg font-semibold tracking-[-0.025em] sm:text-xl">
+                                        {area.title}
+                                    </h3>
+                                    <p className="mt-3 flex-1 text-[13px] leading-6 text-[#77736C] sm:text-sm">
+                                        {area.description}
+                                    </p>
+                                    <div className="mt-5 flex flex-wrap gap-2">
+                                        {area.tags.map((tag) => (
+                                            <span key={tag} className="border border-black/[0.07] bg-white px-2.5 py-1.5 text-[10px] font-medium text-[#77736C]">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <Link
+                                        href="/contact"
+                                        aria-label={`Enquire about ${area.title}`}
+                                        className="mt-6 inline-flex items-center gap-2 self-start text-[11px] font-bold uppercase tracking-[0.08em] text-[#8D713D] transition group-hover:gap-3"
+                                    >
+                                        Discuss this matter <ArrowRight size={14} />
+                                    </Link>
+                                </article>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
 
+            {/* PROCESS */}
+            <section id="how-it-works" className="bg-[#111416] text-white">
+                <div className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-28 xl:px-16">
+                    <SectionHeading
+                        dark
+                        eyebrow="The consultation process"
+                        title="A clearer path"
+                        highlight="forward."
+                        description="A straightforward starting point for understanding your legal concern and deciding what to do next."
+                    />
+
+                    <div className="relative mt-12 grid gap-8 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-6">
+                        {processSteps.map((step, index) => {
+                            const Icon = step.icon;
+
+                            return (
+                                <article key={step.number} className="relative border-t border-white/15 pt-6">
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-serif text-3xl text-[#C6A665]">{step.number}</span>
+                                        <Icon size={22} strokeWidth={1.4} className="text-[#C6A665]" />
+                                    </div>
+                                    <h3 className="mt-6 text-base font-semibold sm:text-lg">{step.title}</h3>
+                                    <p className="mt-3 text-sm leading-7 text-white/55">{step.description}</p>
+                                    {index !== processSteps.length - 1 && (
+                                        <ArrowDownRight size={18} className="mt-5 hidden text-[#C6A665]/70 lg:block" />
+                                    )}
+                                </article>
+                            );
+                        })}
+                    </div>
+
+                    <div className="mt-12 flex flex-col items-start justify-between gap-5 border border-white/10 bg-white/[0.035] p-5 sm:p-7 md:flex-row md:items-center">
+                        <div>
+                            <h3 className="text-lg font-semibold">Not sure where your matter fits?</h3>
+                            <p className="mt-2 text-sm leading-6 text-white/55">
+                                Start with a brief enquiry and explain what kind of assistance you need.
+                            </p>
+                        </div>
+                        <Link href="/contact" className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 bg-[#C6A665] px-5 text-xs font-bold text-[#171717] transition hover:bg-[#D6BC84]">
+                            Contact us <ArrowRight size={15} />
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* BENEFITS */}
+            <section className="bg-[#F8F7F4]">
+                <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20 lg:px-12 lg:py-28 xl:px-16">
+                    <div>
+                        <SectionLabel>What matters in legal guidance</SectionLabel>
+                        <h2 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl lg:text-[46px]">
+                            More clarity.
+                            <br />
+                            Better-informed{" "}
+                            <span className="font-serif italic font-medium text-[#B39456]">
+                                decisions.
+                            </span>
+                        </h2>
+                        <p className="mt-5 max-w-lg text-sm leading-7 text-[#77736C] sm:text-base">
+                            Good legal guidance should help you understand the issues, ask
+                            the right questions, and make decisions with a clearer view of
+                            the available options.
+                        </p>
+                        <Link href="/contact" className="mt-7 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-[#8D713D]">
+                            Speak with us <ArrowRight size={15} />
+                        </Link>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                        {benefits.map((benefit, index) => {
+                            const Icon = benefit.icon;
+
+                            return (
+                                <article key={benefit.title} className="border border-black/[0.07] bg-white p-5 sm:p-6">
+                                    <div className="flex h-11 w-11 items-center justify-center bg-[#F5F0E6] text-[#9D7D3E]">
+                                        <Icon size={20} strokeWidth={1.5} />
+                                    </div>
+                                    <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#A7874D]">
+                                        0{index + 1}
+                                    </p>
+                                    <h3 className="mt-2 text-base font-semibold">{benefit.title}</h3>
+                                    <p className="mt-3 text-[13px] leading-6 text-[#77736C]">
+                                        {benefit.description}
+                                    </p>
+                                </article>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            {/* LEGAL INSIGHTS / BLOGS */}
+            <section id="legal-insights" className="border-y border-black/[0.06] bg-white">
+                <div className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-28 xl:px-16">
+                    <div className="flex flex-col items-start justify-between gap-5 md:flex-row md:items-end">
+                        <div className="max-w-2xl">
+                            <SectionLabel>Legal insights</SectionLabel>
+                            <h2 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl lg:text-[46px]">
+                                Understand the law.
+                                <br />
+                                <span className="font-serif italic font-medium text-[#B39456]">
+                                    Know your options.
+                                </span>
+                            </h2>
+                            <p className="mt-4 max-w-xl text-sm leading-7 text-[#77736C]">
+                                Explore practical introductions to common legal questions
+                                before deciding what to discuss with a legal professional.
+                            </p>
+                        </div>
+                        <Link
+                            href="/articles"
+                            className="inline-flex items-center gap-2 border border-black/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#77736C] transition-all duration-300 hover:border-[#A7874D]/40 hover:bg-[#A7874D]/5 hover:text-[#A7874D]"
+                        >
+                            <FileText size={15} className="text-[#A7874D]" />
+                            Legal information library
+                        </Link>
+                    </div>
+
+                    <div className="mt-10 grid gap-5 md:grid-cols-2 lg:mt-14 lg:grid-cols-3">
+                        {legalInsights.map((article, index) => (
+                            <article
+                                key={article.title}
+                                className="flex h-full flex-col border border-black/[0.08] bg-[#F8F7F4] transition hover:border-[#C6A665]/50 hover:shadow-[0_15px_40px_rgba(23,23,23,0.05)]"
+                            >
+                                <div className="relative flex h-36 items-center justify-between overflow-hidden border-b border-black/[0.06] bg-[#111416] px-6 sm:h-44">
+                                    <div className="absolute -right-5 -top-12 h-40 w-40 rounded-full border border-[#C6A665]/20" />
+                                    <div className="absolute -right-1 -top-5 h-28 w-28 rounded-full border border-[#C6A665]/15" />
+                                    <span className="relative z-10 flex h-12 w-12 items-center justify-center border border-[#C6A665]/40 text-[#C6A665]">
+                                        {index === 0 ? <HeartHandshake size={23} /> : index === 1 ? <Landmark size={23} /> : <ShieldCheck size={23} />}
+                                    </span>
+                                    <span className="relative z-10 self-end pb-1 font-serif text-5xl text-white/[0.12]">
+                                        0{index + 1}
+                                    </span>
+                                </div>
+
+                                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                        <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#9D7D3E]">
+                                            {article.category}
+                                        </span>
+                                        <span className="text-[10px] text-[#89847A]">{article.readTime}</span>
+                                    </div>
+
+                                    <h3 className="mt-4 text-lg font-semibold leading-snug tracking-[-0.025em]">
+                                        {article.title}
+                                    </h3>
+
+                                    <p className="mt-3 text-[13px] leading-6 text-[#77736C]">
+                                        {article.description}
+                                    </p>
+
+                                    <ul className="mt-5 space-y-2 border-t border-black/[0.07] pt-4">
+                                        {article.points.map((point) => (
+                                            <li key={point} className="flex items-start gap-2 text-xs leading-5 text-[#66635D]">
+                                                <Check size={13} className="mt-0.5 shrink-0 text-[#A7874D]" />
+                                                {point}
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <Link
+                                        href="/contact"
+                                        className="mt-6 inline-flex items-center gap-2 self-start border-b border-[#C6A665]/60 pb-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#8D713D] transition hover:gap-3"
+                                    >
+                                        Discuss this topic <ArrowRight size={14} />
+                                    </Link>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+
+                    <p className="mt-6 text-xs leading-6 text-[#89847A]">
+                        These are introductory topic summaries, not substitutes for
+                        complete legal articles or advice specific to an individual case.
+                    </p>
+                </div>
+            </section>
+
+            {/* FAQ */}
+            <section id="faqs" className="bg-[#F8F7F4]">
+                <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20 lg:px-12 lg:py-28 xl:px-16">
+                    <div>
+                        <SectionLabel>Frequently asked questions</SectionLabel>
+                        <h2 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl lg:text-[44px]">
+                            Questions before you{" "}
+                            <span className="font-serif italic font-medium text-[#B39456]">
+                                get started.
+                            </span>
+                        </h2>
+                        <p className="mt-5 text-sm leading-7 text-[#77736C]">
+                            Find answers to common questions about consultations,
+                            documentation, legal processes, and getting started.
+                        </p>
+                        <Link href="/contact" className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-[#8D713D]">
+                            Have another question? <ArrowRight size={15} />
+                        </Link>
+                    </div>
+
+                    <div className="border-t border-black/10">
+                        {faqs.map((faq, index) => {
+                            const isOpen = openFaq === index;
+
+                            return (
+                                <div key={faq.question} className="border-b border-black/10">
+                                    <button
+                                        type="button"
+                                        aria-expanded={isOpen}
+                                        onClick={() => setOpenFaq(isOpen ? -1 : index)}
+                                        className="flex min-h-[68px] w-full items-center justify-between gap-4 py-5 text-left"
+                                    >
+                                        <span className="text-sm font-semibold leading-6 sm:text-[15px]">
+                                            {faq.question}
+                                        </span>
+                                        <ChevronDown
+                                            size={18}
+                                            className={`shrink-0 text-[#9D7D3E] transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                                        />
+                                    </button>
+                                    {isOpen && (
+                                        <p className="max-w-2xl pb-6 pr-6 text-[13px] leading-7 text-[#77736C] sm:text-sm">
+                                            {faq.answer}
+                                        </p>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            {/* CONTACT CTA */}
+            <section id="contact" className="bg-[#111416] text-white">
+                <div className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-28 xl:px-16">
+                    <div className="relative overflow-hidden border border-white/10 bg-[#171A1C] px-5 py-10 sm:px-10 sm:py-14 lg:px-16 lg:py-16">
+                        <div className="pointer-events-none absolute -right-20 -top-32 h-72 w-72 rounded-full border border-[#C6A665]/20 sm:h-96 sm:w-96" />
+                        <div className="pointer-events-none absolute -right-8 -top-20 h-56 w-56 rounded-full border border-[#C6A665]/15 sm:h-72 sm:w-72" />
+
+                        <div className="relative grid items-center gap-9 lg:grid-cols-[1fr_auto] lg:gap-12">
+                            <div className="max-w-3xl">
+                                <SectionLabel dark>Take the next step</SectionLabel>
+                                <h2 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl lg:text-[52px]">
+                                    Your concerns deserve
+                                    <br />
+                                    <span className="font-serif italic font-medium text-[#C6A665]">
+                                        thoughtful attention.
+                                    </span>
+                                </h2>
+                                <p className="mt-5 max-w-xl text-sm leading-7 text-white/60 sm:text-base">
+                                    Start a conversation about your legal matter. Get clarity on
+                                    the questions to ask, the documents to prepare, and the next
+                                    steps worth considering.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:min-w-[215px] lg:flex-col">
+                                <a href={`tel:${PHONE_NUMBER}`} className="inline-flex min-h-12 items-center justify-center gap-2 bg-[#C6A665] px-5 text-xs font-bold text-[#171717] transition hover:bg-[#D6BC84]">
+                                    <Phone size={15} /> Call for a consultation
+                                </a>
+                                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 border border-white/20 px-5 text-xs font-semibold text-white transition hover:border-[#C6A665] hover:bg-white/[0.05]">
+                                    <MessageCircle size={16} /> WhatsApp enquiry
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-10 grid gap-5 border-b border-white/10 pb-9 sm:grid-cols-3">
+                        {[
+                            ["01", "Share your concern", "Explain the general nature of your matter."],
+                            ["02", "Discuss your questions", "Identify the legal information you need."],
+                            ["03", "Clarify next steps", "Understand the appropriate way forward."],
+                        ].map(([number, title, description]) => (
+                            <div key={number} className="flex items-start gap-3">
+                                <span className="font-serif text-lg text-[#C6A665]">{number}</span>
+                                <div>
+                                    <h3 className="text-sm font-semibold">{title}</h3>
+                                    <p className="mt-1.5 text-xs leading-6 text-white/45">{description}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-7 flex flex-col gap-3 text-[11px] leading-6 text-white/40 sm:flex-row sm:items-start sm:justify-between">
+                        <p className="max-w-3xl">
+                            Legal information on this website is general in nature and is not
+                            a substitute for professional legal advice. Outcomes, procedures,
+                            and timelines depend on the applicable law and individual facts.
+                        </p>
+                        <a href="#home" className="inline-flex shrink-0 items-center gap-2 self-start text-[#C6A665] hover:text-[#D6BC84]">
+                            Back to top <ArrowUpRight size={14} />
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            {/* FLOATING CONTACT ACTIONS */}
+            <div className="fixed bottom-4 right-3 z-40 flex flex-col items-end gap-2 sm:bottom-6 sm:right-6">
                 <a
                     href={`tel:${PHONE_NUMBER}`}
-                    aria-label={`Call ${DISPLAY_PHONE}`}
-                    className="group flex h-12 items-center gap-2.5 rounded-full border border-black/[0.08] bg-white px-4 shadow-[0_12px_35px_rgba(23,23,21,0.14)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(23,23,21,0.18)]"
+                    aria-label={`Call us at ${DISPLAY_PHONE}`}
+                    className="group flex h-12 items-center gap-2 rounded-full border border-black/10 bg-white px-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.13)] transition hover:-translate-y-0.5 hover:border-[#C6A665] sm:px-4"
                 >
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#171715]">
-                        <Phone
-                            size={14}
-                            strokeWidth={2}
-                            className="text-white"
-                        />
-                    </span>
-
-                    <span className="hidden text-[11px] font-semibold text-[#171715] sm:block">
-                        Call us
-                    </span>
+                    <Phone size={16} className="text-[#252525]" />
+                    <span className="text-[11px] font-bold text-[#252525]">Call us</span>
                 </a>
-
-
                 <a
                     href={WHATSAPP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`WhatsApp ${DISPLAY_PHONE}`}
-                    className="group flex h-12 items-center gap-2.5 rounded-full border border-black/[0.08] bg-white px-4 shadow-[0_12px_35px_rgba(23,23,21,0.14)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(23,23,21,0.18)]"
+                    aria-label={`WhatsApp us at ${DISPLAY_PHONE}`}
+                    className="flex h-12 items-center gap-2 rounded-full border border-[#C6A665]/40 bg-[#D8BE83] px-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.13)] transition hover:-translate-y-0.5 hover:bg-[#E4CD9C] sm:px-4"
                 >
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#B59A63]">
-                        <MessageCircle
-                            size={15}
-                            strokeWidth={2}
-                            className="text-[#171715]"
-                        />
-                    </span>
-
-                    <span className="hidden text-[11px] font-semibold text-[#171715] sm:block">
-                        WhatsApp
-                    </span>
+                    <MessageCircle size={17} className="text-[#171717]" />
+                    <span className="text-[11px] font-bold text-[#171717]">WhatsApp</span>
                 </a>
-
             </div>
-        </>
+        </main>
     );
-};
-
-export default LandingPageSEOContent;
+}
