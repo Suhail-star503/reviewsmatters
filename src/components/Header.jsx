@@ -3,30 +3,70 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  ArrowRight,
+  ArrowUpRight,
   ChevronDown,
   Menu,
   X,
-  Star,
+  Scale,
+  Gavel,
+  HeartHandshake,
+  Building2,
+  FileText,
+  ShieldCheck,
 } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
+const practiceAreas = [
+  {
+    title: "Divorce & Family Law",
+    description: "Professional guidance for family and matrimonial matters.",
+    href: "/practice-areas/divorce-family-law",
+    icon: HeartHandshake,
+  },
+  {
+    title: "Court Marriage",
+    description: "Complete legal assistance for court marriage procedures.",
+    href: "/practice-areas/court-marriage",
+    icon: Scale,
+  },
+  {
+    title: "Live-in Relationship",
+    description: "Legal advice and protection for live-in relationships.",
+    href: "/practice-areas/live-in-relationship",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Criminal Law",
+    description: "Strong legal representation for criminal matters.",
+    href: "/practice-areas/criminal-law",
+    icon: Gavel,
+  },
+  {
+    title: "Civil Law",
+    description: "Representation for civil disputes and legal claims.",
+    href: "/practice-areas/civil-law",
+    icon: FileText,
+  },
+  {
+    title: "Corporate & Business",
+    description: "Legal solutions for businesses and entrepreneurs.",
+    href: "/practice-areas/corporate-business",
+    icon: Building2,
+  },
+];
 
-const navItems = [
-  
+const navLinks = [
   {
-    name: "How It Works",
-    href: "/#how-it-works",
+    label: "About Us",
+    href: "/about",
   },
   {
-    name: "Features",
-    href: "/#features",
+    label: "Resources",
+    href: "/resources",
   },
   {
-    name: "Pricing",
-    href: "/pricing",
+    label: "Contact",
+    href: "/contact",
   },
 ];
 
@@ -34,15 +74,14 @@ export default function Header() {
   const headerRef = useRef(null);
   const navRef = useRef(null);
   const logoRef = useRef(null);
-  const navItemsRef = useRef([]);
-  const actionsRef = useRef(null);
+  const ctaRef = useRef(null);
+  const megaMenuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
+  const [practiceOpen, setPracticeOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [productOpen, setProductOpen] = useState(false);
 
-  /* ============================================================
-     INITIAL ENTRANCE
-     ============================================================ */
+  /* INITIAL NAVBAR ANIMATION */
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -54,141 +93,101 @@ export default function Header() {
 
       tl.fromTo(
         headerRef.current,
-        {
-          y: -30,
-          opacity: 0,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-        }
+        { y: -30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 }
       );
 
       tl.fromTo(
         logoRef.current,
-        {
-          y: 10,
-          opacity: 0,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.55,
-        },
+        { y: 10, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5 },
         "-=0.45"
       );
 
       tl.fromTo(
-        navItemsRef.current,
-        {
-          y: 8,
-          opacity: 0,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-          stagger: 0.06,
-        },
-        "-=0.35"
+        ".desktop-nav-item",
+        { y: 8, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.45, stagger: 0.06 },
+        "-=0.3"
       );
 
       tl.fromTo(
-        actionsRef.current,
-        {
-          y: 8,
-          opacity: 0,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-        },
-        "-=0.3"
+        ctaRef.current,
+        { x: 15, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.5 },
+        "-=0.25"
       );
     }, headerRef);
 
     return () => ctx.revert();
   }, []);
 
-  /* ============================================================
-     SCROLL HEADER
-     ============================================================ */
+  /* SCROLL NAVBAR */
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        start: "top -30",
-        end: 99999,
+    const handleScroll = () => {
+      if (!navRef.current) return;
 
-        onEnter: () => {
-          gsap.to(navRef.current, {
-            backgroundColor: "rgba(255,255,255,0.88)",
-            borderColor: "rgba(23,23,21,0.10)",
-            backdropFilter: "blur(18px)",
-            boxShadow: "0 10px 40px rgba(23,23,21,0.07)",
-            duration: 0.3,
-            ease: "power2.out",
-          });
-        },
-
-        onLeaveBack: () => {
-          gsap.to(navRef.current, {
-            backgroundColor: "rgba(255,255,255,0)",
-            borderColor: "rgba(23,23,21,0.06)",
-            backdropFilter: "blur(0px)",
-            boxShadow: "none",
-            duration: 0.3,
-            ease: "power2.out",
-          });
-        },
-      });
-    }, headerRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  /* ============================================================
-     CLOSE MOBILE MENU ON RESIZE
-     ============================================================ */
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setMobileOpen(false);
+      if (window.scrollY > 35) {
+        gsap.to(navRef.current, {
+          backgroundColor: "rgba(255,255,255,0.98)",
+          borderColor: "rgba(17,17,17,0.09)",
+          boxShadow: "0 12px 40px rgba(0,0,0,0.07)",
+          backdropFilter: "blur(18px)",
+          duration: 0.35,
+          ease: "power2.out",
+        });
+      } else {
+        gsap.to(navRef.current, {
+          backgroundColor: "rgba(255,255,255,0.96)",
+          borderColor: "rgba(17,17,17,0.06)",
+          boxShadow: "0 4px 25px rgba(0,0,0,0.025)",
+          backdropFilter: "blur(10px)",
+          duration: 0.35,
+          ease: "power2.out",
+        });
       }
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  /* ============================================================
-     LOCK BODY WHEN MOBILE MENU IS OPEN
-     ============================================================ */
+  /* PRACTICE AREA MEGA MENU */
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!megaMenuRef.current || !practiceOpen) return;
 
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
+    gsap.fromTo(
+      megaMenuRef.current,
+      { opacity: 0, y: -12, scale: 0.98 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "power3.out" }
+    );
 
-  /* ============================================================
-     MOBILE MENU ANIMATION
-     ============================================================ */
+    gsap.fromTo(
+      ".practice-item",
+      { opacity: 0, y: 10 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        stagger: 0.045,
+        delay: 0.05,
+        ease: "power3.out",
+      }
+    );
+  }, [practiceOpen]);
+
+  /* MOBILE MENU */
 
   useEffect(() => {
     if (!mobileOpen) return;
+
+    document.body.style.overflow = "hidden";
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -198,690 +197,245 @@ export default function Header() {
       });
 
       tl.fromTo(
-        ".mobile-menu",
-        {
-          opacity: 0,
-          y: -12,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.35,
-        }
+        mobileMenuRef.current,
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 0.4 }
       );
 
       tl.fromTo(
-        ".mobile-link",
-        {
-          opacity: 0,
-          y: 15,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          stagger: 0.06,
-        },
-        "-=0.15"
+        ".mobile-nav-item",
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.45, stagger: 0.06 },
+        "-=0.2"
       );
+    }, mobileMenuRef);
 
-      tl.fromTo(
-        ".mobile-actions",
-        {
-          opacity: 0,
-          y: 15,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-        },
-        "-=0.25"
-      );
-    });
-
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
-  /* ============================================================
-     LOGO HOVER
-     ============================================================ */
+  /* CTA HOVER */
 
-  const handleLogoEnter = () => {
-    gsap.to(logoRef.current, {
+  const handleCtaEnter = () => {
+    gsap.to(ctaRef.current, {
+      y: -2,
       scale: 1.015,
-      duration: 0.35,
+      duration: 0.3,
       ease: "power3.out",
     });
   };
 
-  const handleLogoLeave = () => {
-    gsap.to(logoRef.current, {
+  const handleCtaLeave = () => {
+    gsap.to(ctaRef.current, {
+      y: 0,
       scale: 1,
-      duration: 0.35,
+      duration: 0.3,
       ease: "power3.out",
     });
   };
 
-  /* ============================================================
-     CLOSE MENU
-     ============================================================ */
+  /* CLOSE MOBILE */
 
-  const closeMobileMenu = () => {
+  const closeMobile = () => {
     setMobileOpen(false);
-    setProductOpen(false);
+    setPracticeOpen(false);
   };
 
   return (
-    <>
-      <header
-        ref={headerRef}
-        className="
-          fixed
-          left-0
-          top-0
-          z-[100]
-          w-full
-          opacity-0
-        "
-      >
-        <div
-          ref={navRef}
-          className="
-            relative
-            mx-auto
-            w-full
-            border-b
-            border-black/[0.06]
-            bg-white/[0.92]
-            transition-none
-          "
-        >
-          <div
-            className="
-              mx-auto
-              flex
-              h-[72px]
-              w-full
-              max-w-[1280px]
-              items-center
-              justify-between
-              px-5
-              sm:px-8
-              lg:h-[76px]
-              lg:px-10
-              xl:px-0
-            "
-          >
-            {/* =================================================
-                LOGO
-            ================================================= */}
+    <header ref={headerRef} className="fixed left-0 top-0 z-[100] w-full">
+      <div ref={navRef} className="relative border-b border-black/[0.06] bg-white/[0.96]">
+        <div className="mx-auto flex h-[78px] w-full max-w-[1380px] items-center justify-between px-5 sm:px-8 lg:h-[84px] lg:px-10 xl:px-0">
 
-            <Link
-              ref={logoRef}
-              href="/"
-              aria-label="Powered by Kaaf11.com home"
-              onMouseEnter={handleLogoEnter}
-              onMouseLeave={handleLogoLeave}
-              className="
-                group
-                flex
-                shrink-0
-                items-center
-                gap-2.5
-                will-change-transform
-              "
-            >
-              {/* Logo mark */}
+          {/* LOGO */}
 
-              <div
-                className="
-                  relative
-                  flex
-                  h-9
-                  w-9
-                  items-center
-                  justify-center
-                  overflow-hidden
-                  rounded-xl
-                  bg-[#171715]
-                  shadow-sm
-                  transition-transform
-                  duration-500
-                  group-hover:scale-105
-                "
-              >
-                <Star
-                  size={17}
-                  strokeWidth={2}
-                  fill="white"
-                  className="relative z-10 text-white"
-                />
+          <Link ref={logoRef} href="/" onClick={closeMobile} className="group flex shrink-0 items-center gap-3">
+            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-[#151515] text-white">
+              <Scale size={19} strokeWidth={1.5} className="relative z-10 transition-transform duration-500 group-hover:rotate-[-8deg]" />
 
-                <span
-                  className="
-                    pointer-events-none
-                    absolute
-                    inset-0
-                    translate-x-[-130%]
-                    bg-gradient-to-r
-                    from-transparent
-                    via-white/20
-                    to-transparent
-                    transition-transform
-                    duration-700
-                    group-hover:translate-x-[130%]
-                  "
-                />
+              <span className="absolute inset-0 translate-x-[-120%] bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-[120%]" />
+            </div>
+
+            <div className="leading-none">
+              <div className="text-[18px] font-semibold tracking-[-0.035em] text-[#151515] sm:text-[20px]">
+                DEMO<span className="text-[#A88448]"> OF LAW</span>
               </div>
 
-              {/* Brand */}
-
-              <div className="flex flex-col leading-none">
-                <span
-                  className="
-      text-[17px]
-      font-semibold
-      tracking-[-0.035em]
-      text-[#171715]
-      sm:text-[18px]
-    "
-                >
-                  Review<span className="text-[#B59A63]">Flow</span>
-                </span>
-
-                <span
-                  className="
-      mt-1
-      text-[7px]
-      font-medium
-      tracking-[0.04em]
-      text-[#77746D]
-    "
-                >
-                  Powered by Kaaf11.com
-                </span>
+              <div className="mt-1 text-[8px] font-medium uppercase tracking-[0.2em] text-[#777777]">
+                Legal Excellence
               </div>
-            </Link>
+            </div>
+          </Link>
 
-            {/* =================================================
-                DESKTOP NAVIGATION
-            ================================================= */}
+          {/* DESKTOP NAVIGATION */}
 
-            <nav
-              aria-label="Main navigation"
-              className="
-                absolute
-                left-1/2
-                hidden
-                -translate-x-1/2
-                lg:block
-              "
-            >
-              <div className="flex items-center gap-1">
-                {navItems.map((item, index) => (
-                  <div
-                    key={item.name}
-                    className="relative"
-                    onMouseEnter={() => {
-                      if (item.dropdown) {
-                        setProductOpen(true);
-                      }
-                    }}
-                    onMouseLeave={() => {
-                      if (item.dropdown) {
-                        setProductOpen(false);
-                      }
-                    }}
-                  >
-                    <Link
-                      ref={(el) => {
-                        navItemsRef.current[index] = el;
-                      }}
-                      href={item.href}
-                      className="
-                        group
-                        relative
-                        flex
-                        items-center
-                        gap-1.5
-                        px-4
-                        py-3
-                        text-[12px]
-                        font-medium
-                        tracking-[-0.01em]
-                        text-[#77746D]
-                        transition-colors
-                        duration-300
-                        hover:text-[#171715]
-                      "
-                    >
-                      {item.name}
+          <nav className="hidden items-center gap-1 lg:flex">
 
-                      {item.dropdown && (
-                        <ChevronDown
-                          size={13}
-                          strokeWidth={1.8}
-                          className={`
-                            transition-transform
-                            duration-300
-                            ${productOpen
-                              ? "rotate-180"
-                              : ""
-                            }
-                          `}
-                        />
-                      )}
+            {/* PRACTICE AREAS */}
 
-                      <span
-                        className="
-                          absolute
-                          bottom-[5px]
-                          left-4
-                          right-4
-                          h-px
-                          origin-left
-                          scale-x-0
-                          bg-[#B59A63]
-                          transition-transform
-                          duration-500
-                          ease-[cubic-bezier(.16,1,.3,1)]
-                          group-hover:scale-x-100
-                        "
-                      />
-                    </Link>
+            <div className="relative" onMouseEnter={() => setPracticeOpen(true)} onMouseLeave={() => setPracticeOpen(false)}>
+              <button type="button" className="desktop-nav-item group relative flex items-center gap-1.5 px-4 py-3 text-[13px] font-medium text-[#303030] transition-colors duration-300 hover:text-[#A88448]">
+                Practice Areas
 
-                    {/* =================================================
-                        PRODUCT DROPDOWN
-                    ================================================= */}
+                <ChevronDown size={14} strokeWidth={1.7} className={`transition-transform duration-300 ${practiceOpen ? "rotate-180" : ""}`} />
 
-                    {item.dropdown && productOpen && (
-                      <div
-                        className="
-                          absolute
-                          left-1/2
-                          top-full
-                          w-[330px]
-                          -translate-x-1/2
-                          pt-3
-                        "
-                      >
-                        <div
-                          className="
-                            overflow-hidden
-                            rounded-2xl
-                            border
-                            border-black/[0.08]
-                            bg-white
-                            p-2
-                            shadow-[0_20px_60px_rgba(23,23,21,0.12)]
-                          "
-                        >
-                          {item.dropdown.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.name}
-                              href={dropdownItem.href}
-                              className="
-                                group/item
-                                flex
-                                items-start
-                                justify-between
-                                gap-4
-                                rounded-xl
-                                p-3.5
-                                transition-colors
-                                duration-200
-                                hover:bg-[#F8F7F4]
-                              "
-                            >
-                              <div>
-                                <div
-                                  className="
-                                    text-[13px]
-                                    font-semibold
-                                    text-[#171715]
-                                  "
-                                >
-                                  {dropdownItem.name}
-                                </div>
+                <span className="absolute bottom-1 left-4 right-4 h-px origin-left scale-x-0 bg-[#A88448] transition-transform duration-500 group-hover:scale-x-100" />
+              </button>
 
-                                <div
-                                  className="
-                                    mt-1
-                                    text-[11px]
-                                    leading-5
-                                    text-[#77746D]
-                                  "
-                                >
-                                  {dropdownItem.description}
-                                </div>
+              {/* MEGA MENU */}
+
+              {practiceOpen && (
+                <div ref={megaMenuRef} className="absolute left-1/2 top-full w-[720px] -translate-x-1/2 pt-4">
+                  <div className="overflow-hidden rounded-2xl border border-black/[0.08] bg-white p-3 shadow-[0_30px_80px_rgba(0,0,0,0.12)]">
+                    <div className="grid grid-cols-2 gap-1">
+                      {practiceAreas.map((item) => {
+                        const Icon = item.icon;
+
+                        return (
+                          <Link key={item.title} href={item.href} className="practice-item group flex items-start gap-4 rounded-xl p-4 transition-all duration-300 hover:bg-[#F7F5F0]">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-black/[0.08] bg-white text-[#A88448] transition-all duration-300 group-hover:border-[#A88448]/30 group-hover:bg-[#A88448] group-hover:text-white">
+                              <Icon size={17} strokeWidth={1.6} />
+                            </div>
+
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center justify-between gap-2">
+                                <h3 className="text-[13px] font-semibold text-[#171717]">
+                                  {item.title}
+                                </h3>
+
+                                <ArrowUpRight size={14} className="shrink-0 text-[#777777] opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
                               </div>
 
-                              <ArrowRight
-                                size={15}
-                                strokeWidth={1.7}
-                                className="
-                                  mt-1
-                                  shrink-0
-                                  text-[#B59A63]
-                                  opacity-0
-                                  transition-all
-                                  duration-300
-                                  group-hover/item:translate-x-1
-                                  group-hover/item:opacity-100
-                                "
-                              />
-                            </Link>
-                          ))}
-                        </div>
+                              <p className="mt-1 max-w-[280px] text-[11px] leading-5 text-[#707070]">
+                                {item.description}
+                              </p>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+
+                    {/* MEGA MENU FOOTER */}
+
+                    <div className="mt-2 flex items-center justify-between rounded-xl bg-[#F7F5F0] px-5 py-4">
+                      <div>
+                        <p className="text-[12px] font-semibold text-[#171717]">
+                          Not sure which service you need?
+                        </p>
+
+                        <p className="mt-1 text-[10px] text-[#707070]">
+                          Speak with our legal team.
+                        </p>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </nav>
 
-            {/* =================================================
-                DESKTOP ACTIONS
-            ================================================= */}
+                      <Link href="/contact" className="group flex items-center gap-1.5 text-[11px] font-semibold text-[#A88448]">
+                        Get legal help
 
-            <div
-              ref={actionsRef}
-              className="
-                hidden
-                items-center
-                gap-5
-                lg:flex
-              "
-            >
-              <Link
-                href="/auth"
-                className="
-                  text-[12px]
-                  font-medium
-                  text-[#55534D]
-                  transition-colors
-                  duration-300
-                  hover:text-[#171715]
-                "
-              >
-                Sign in
-              </Link>
-
-              <Link
-                href="/auto"
-                className="
-                  group
-                  relative
-                  inline-flex
-                  h-10
-                  items-center
-                  gap-2
-                  overflow-hidden
-                  rounded-lg
-                  bg-[#B59A63]
-                  px-4
-                  text-[12px]
-                  font-semibold
-                  text-white
-                "
-              >
-                <span className="relative z-10">
-                  Get started
-                </span>
-
-                <ArrowRight
-                  size={14}
-                  strokeWidth={1.8}
-                  className="
-                    relative
-                    z-10
-                    transition-transform
-                    duration-300
-                    group-hover:translate-x-0.5
-                  "
-                />
-              </Link>
-            </div>
-
-            {/* =================================================
-                MOBILE BUTTON
-            ================================================= */}
-
-            <button
-              type="button"
-              aria-label={
-                mobileOpen
-                  ? "Close navigation"
-                  : "Open navigation"
-              }
-              aria-expanded={mobileOpen}
-              onClick={() =>
-                setMobileOpen((prev) => !prev)
-              }
-              className="
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-lg
-                border
-                border-black/[0.09]
-                bg-white
-                text-[#171715]
-                transition-all
-                duration-300
-                hover:border-black/20
-                lg:hidden
-              "
-            >
-              {mobileOpen ? (
-                <X size={19} strokeWidth={1.7} />
-              ) : (
-                <Menu size={19} strokeWidth={1.7} />
-              )}
-            </button>
-          </div>
-
-          {/* =================================================
-              MOBILE MENU
-          ================================================= */}
-
-          {mobileOpen && (
-            <div
-              className="
-                mobile-menu
-                absolute
-                left-0
-                right-0
-                top-full
-                max-h-[calc(100vh-72px)]
-                overflow-y-auto
-                border-b
-                border-black/[0.08]
-                bg-white
-                shadow-[0_20px_50px_rgba(23,23,21,0.08)]
-                lg:hidden
-              "
-            >
-              <div className="px-5 py-5 sm:px-8">
-                <nav
-                  aria-label="Mobile navigation"
-                  className="flex flex-col"
-                >
-                  {navItems.map((item) => (
-                    <div
-                      key={item.name}
-                      className="border-b border-black/[0.07]"
-                    >
-                      <Link
-                        href={item.href}
-                        onClick={closeMobileMenu}
-                        className="
-                          mobile-link
-                          group
-                          flex
-                          items-center
-                          justify-between
-                          py-4
-                          text-[14px]
-                          font-medium
-                          text-[#33322F]
-                          transition-colors
-                          duration-300
-                          hover:text-[#B59A63]
-                        "
-                      >
-                        <span>{item.name}</span>
-
-                        {item.dropdown ? (
-                          <ChevronDown
-                            size={16}
-                            strokeWidth={1.7}
-                            className="
-                              text-[#A19E96]
-                            "
-                          />
-                        ) : (
-                          <ArrowRight
-                            size={16}
-                            strokeWidth={1.7}
-                            className="
-                              text-[#A19E96]
-                              transition-transform
-                              duration-300
-                              group-hover:translate-x-1
-                            "
-                          />
-                        )}
+                        <ArrowUpRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </Link>
                     </div>
-                  ))}
-
-                  {/* =================================================
-                      MOBILE ACTIONS
-                  ================================================= */}
-
-                  <div
-                    className="
-                      mobile-actions
-                      flex
-                      flex-col
-                      gap-3
-                      pt-6
-                    "
-                  >
-                    <Link
-                      href="/auth"
-                      onClick={closeMobileMenu}
-                      className="
-                        flex
-                        h-11
-                        items-center
-                        justify-center
-                        rounded-lg
-                        border
-                        border-black/[0.10]
-                        text-[13px]
-                        font-medium
-                        text-[#33322F]
-                        transition-colors
-                        duration-300
-                        hover:bg-[#F8F7F4]
-                      "
-                    >
-                      Sign in
-                    </Link>
-
-                    <Link
-                      href="/auth"
-                      onClick={closeMobileMenu}
-                      className="
-                        flex
-                        h-11
-                        items-center
-                        justify-center
-                        gap-2
-                        rounded-lg
-                        bg-[#B59A63]
-                        text-[13px]
-                        font-semibold
-                        text-white
-                      "
-                    >
-                      Get started
-                      <ArrowRight
-                        size={15}
-                        strokeWidth={1.8}
-                      />
-                    </Link>
                   </div>
-
-                  {/* =================================================
-                      TRUST MESSAGE
-                  ================================================= */}
-
-                  <div
-                    className="
-                      mt-6
-                      rounded-xl
-                      bg-[#F8F7F4]
-                      p-4
-                    "
-                  >
-                    <div className="flex items-start gap-3">
-                      <div
-                        className="
-                          flex
-                          h-8
-                          w-8
-                          shrink-0
-                          items-center
-                          justify-center
-                          rounded-lg
-                          bg-white
-                          shadow-sm
-                        "
-                      >
-                        <Star
-                          size={15}
-                          fill="#B59A63"
-                          className="text-[#B59A63]"
-                        />
-                      </div>
-
-                      <div>
-                        <p
-                          className="
-                            text-[12px]
-                            font-semibold
-                            text-[#33322F]
-                          "
-                        >
-                          Build a stronger local reputation
-                        </p>
-
-                        <p
-                          className="
-                            mt-1
-                            text-[11px]
-                            leading-5
-                            text-[#77746D]
-                          "
-                        >
-                          Manage reviews and improve your
-                          local presence from one place.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </nav>
-              </div>
+                </div>
+              )}
             </div>
-          )}
+
+            {/* NORMAL LINKS */}
+
+            {navLinks.map((item) => (
+              <Link key={item.label} href={item.href} className="desktop-nav-item group relative px-4 py-3 text-[13px] font-medium text-[#303030] transition-colors duration-300 hover:text-[#A88448]">
+                {item.label}
+
+                <span className="absolute bottom-1 left-4 right-4 h-px origin-left scale-x-0 bg-[#A88448] transition-transform duration-500 group-hover:scale-x-100" />
+              </Link>
+            ))}
+          </nav>
+
+          {/* DESKTOP CTA */}
+
+          <div className="hidden lg:block">
+            <Link ref={ctaRef} href="/contact" onMouseEnter={handleCtaEnter} onMouseLeave={handleCtaLeave} className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#151515] px-5 text-[12px] font-semibold text-white shadow-sm transition-colors duration-300 hover:bg-[#252525]">
+              <span className="text-white">Book a Consultation</span>
+
+              <ArrowUpRight size={14} strokeWidth={1.8} className="text-white transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+          </div>
+
+          {/* MOBILE BUTTON */}
+
+          <button type="button" aria-label={mobileOpen ? "Close navigation" : "Open navigation"} aria-expanded={mobileOpen} onClick={() => setMobileOpen((prev) => !prev)} className="flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.1] bg-white text-[#151515] lg:hidden">
+            {mobileOpen ? (
+              <X size={19} strokeWidth={1.6} />
+            ) : (
+              <Menu size={19} strokeWidth={1.6} />
+            )}
+          </button>
         </div>
-      </header>
-    </>
+
+        {/* MOBILE MENU */}
+
+        {mobileOpen && (
+          <div ref={mobileMenuRef} className="absolute left-0 right-0 top-full max-h-[calc(100vh-78px)] overflow-y-auto border-b border-black/[0.08] bg-white shadow-[0_25px_70px_rgba(0,0,0,0.1)] lg:hidden">
+            <div className="px-5 py-6 sm:px-8">
+              <nav className="flex flex-col">
+
+                {/* MOBILE PRACTICE AREAS */}
+
+                <div className="mobile-nav-item border-b border-black/[0.07]">
+                  <button type="button" onClick={() => setPracticeOpen((prev) => !prev)} className="flex w-full items-center justify-between py-4 text-left text-[15px] font-medium text-[#171717]">
+                    Practice Areas
+
+                    <ChevronDown size={17} className={`text-[#444444] transition-transform duration-300 ${practiceOpen ? "rotate-180" : ""}`} />
+                  </button>
+
+                  {practiceOpen && (
+                    <div className="pb-3">
+                      {practiceAreas.map((item) => (
+                        <Link key={item.title} href={item.href} onClick={closeMobile} className="flex items-center gap-3 rounded-lg px-3 py-3 text-[13px] text-[#4A4A4A] transition-colors hover:bg-[#F7F5F0] hover:text-[#111111]">
+                          <item.icon size={15} className="shrink-0 text-[#A88448]" />
+                          <span>{item.title}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* MOBILE LINKS */}
+
+                {navLinks.map((item) => (
+                  <Link key={item.label} href={item.href} onClick={closeMobile} className="mobile-nav-item flex items-center justify-between border-b border-black/[0.07] py-4 text-[15px] font-medium text-[#171717] transition-colors hover:text-[#A88448]">
+                    <span>{item.label}</span>
+
+                    <ArrowUpRight size={16} className="text-[#888888]" />
+                  </Link>
+                ))}
+
+                {/* MOBILE CTA */}
+
+                <div className="mobile-nav-item pt-6">
+                  <Link href="/contact" onClick={closeMobile} className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#151515] text-[13px] font-semibold text-white transition-colors duration-300 hover:bg-[#252525]">
+                    <span className="text-white">Book a Consultation</span>
+
+                    <ArrowUpRight size={15} className="text-white" />
+                  </Link>
+                </div>
+
+                {/* TRUST MESSAGE */}
+
+                <div className="mobile-nav-item mt-6 rounded-xl bg-[#F7F5F0] p-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#A88448]">
+                    Legal assistance
+                  </p>
+
+                  <p className="mt-2 text-[12px] leading-5 text-[#606060]">
+                    Speak with our legal team about your situation and understand your available options.
+                  </p>
+                </div>
+              </nav>
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
   );
 }

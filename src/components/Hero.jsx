@@ -1,5 +1,7 @@
+
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
@@ -7,668 +9,303 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
     ArrowRight,
     ArrowUpRight,
-    Check,
-    MessageSquare,
-    QrCode,
-    Star,
-    TrendingUp,
+    Scale,
+    ShieldCheck,
+    Sparkles,
 } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
     const sectionRef = useRef(null);
-    const dashboardRef = useRef(null);
-    const phoneRef = useRef(null);
+    const imageWrapRef = useRef(null);
+    const imageParallaxRef = useRef(null);
+    const imageMouseRef = useRef(null);
 
     useLayoutEffect(() => {
         const section = sectionRef.current;
+        const imageWrap = imageWrapRef.current;
+        const imageParallax = imageParallaxRef.current;
+        const imageMouse = imageMouseRef.current;
 
         if (!section) return;
 
         const ctx = gsap.context(() => {
-            /* ============================================================
-               INITIAL STATE
-            ============================================================ */
+            const reduceMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)"
+            ).matches;
 
-            gsap.set(".hero-badge", {
-                opacity: 0,
-                y: 18,
+            const revealSelectors = [
+                ".law-hero-eyebrow",
+                ".law-hero-title-line",
+                ".law-hero-description",
+                ".law-hero-actions",
+                ".law-hero-trust",
+                ".law-hero-scroll",
+            ];
+
+            if (reduceMotion) return;
+
+            gsap.set(revealSelectors, { autoAlpha: 0 });
+            gsap.set(".law-hero-eyebrow", { y: 16 });
+            gsap.set(".law-hero-title-line", { y: 28 });
+            gsap.set(".law-hero-description", { y: 16 });
+            gsap.set(".law-hero-actions", { y: 16 });
+            gsap.set(".law-hero-trust", { y: 12 });
+            gsap.set(".law-hero-scroll", { y: 8 });
+
+            gsap.set(imageParallax, {
+                autoAlpha: 0,
+                scale: 1.025,
             });
 
-            gsap.set(".hero-word", {
-                opacity: 0,
-                y: 45,
-            });
-
-            gsap.set(".hero-description", {
-                opacity: 0,
-                y: 25,
-            });
-
-            gsap.set(".hero-actions", {
-                opacity: 0,
-                y: 25,
-            });
-
-            gsap.set(".hero-trust", {
-                opacity: 0,
-                y: 20,
-            });
-
-            gsap.set(".hero-dashboard", {
-                opacity: 0,
-                y: 70,
-                scale: 0.94,
-                rotateX: 8,
-            });
-
-            gsap.set(".hero-phone", {
-                opacity: 0,
-                x: 50,
-                y: 30,
-                rotate: 5,
-            });
-
-            gsap.set(".hero-floating-card", {
-                opacity: 0,
-                scale: 0.85,
-            });
-
-            /* ============================================================
-               ENTRANCE ANIMATION
-            ============================================================ */
+            gsap.set(imageMouse, { x: 0, y: 0 });
 
             const intro = gsap.timeline({
-                defaults: {
-                    ease: "power3.out",
-                },
+                defaults: { ease: "power3.out" },
             });
 
             intro
-                .to(".hero-badge", {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.7,
-                })
-                .to(".hero-word", {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.8,
-                    stagger: 0.08,
-                }, "-=0.35")
-                .to(".hero-description", {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.7,
-                }, "-=0.45")
-                .to(".hero-actions", {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.7,
-                }, "-=0.45")
-                .to(".hero-trust", {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.6,
-                }, "-=0.4")
-                .to(".hero-dashboard", {
-                    opacity: 1,
-                    y: 0,
+                .to(imageParallax, {
+                    autoAlpha: 1,
                     scale: 1,
-                    rotateX: 0,
-                    duration: 1.15,
-                    ease: "power4.out",
-                }, "-=0.75")
-                .to(".hero-phone", {
-                    opacity: 1,
-                    x: 0,
-                    y: 0,
-                    rotate: 0,
                     duration: 0.9,
-                    ease: "power4.out",
-                }, "-=0.7")
-                .to(".hero-floating-card", {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.7,
-                    stagger: 0.12,
-                    ease: "back.out(1.4)",
-                }, "-=0.5");
+                })
+                .to(
+                    ".law-hero-eyebrow",
+                    { autoAlpha: 1, y: 0, duration: 0.5 },
+                    "-=0.55"
+                )
+                .to(
+                    ".law-hero-title-line",
+                    {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.6,
+                        stagger: 0.07,
+                    },
+                    "-=0.25"
+                )
+                .to(
+                    ".law-hero-description",
+                    { autoAlpha: 1, y: 0, duration: 0.45 },
+                    "-=0.25"
+                )
+                .to(
+                    ".law-hero-actions",
+                    { autoAlpha: 1, y: 0, duration: 0.45 },
+                    "-=0.2"
+                )
+                .to(
+                    ".law-hero-trust",
+                    { autoAlpha: 1, y: 0, duration: 0.4 },
+                    "-=0.15"
+                )
+                .to(
+                    ".law-hero-scroll",
+                    { autoAlpha: 1, y: 0, duration: 0.35 },
+                    "-=0.15"
+                );
 
-            /* ============================================================
-               FLOATING MOTION
-            ============================================================ */
-
-            gsap.to(".hero-phone", {
-                y: -10,
-                duration: 3.8,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut",
+            gsap.to(imageParallax, {
+                yPercent: 1.5,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: 1,
+                },
             });
 
-            gsap.to(".hero-floating-card-1", {
-                y: -7,
-                duration: 3.2,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut",
-            });
+            if (
+                imageWrap &&
+                imageMouse &&
+                window.matchMedia("(pointer: fine)").matches
+            ) {
+                const xTo = gsap.quickTo(imageMouse, "x", {
+                    duration: 0.5,
+                    ease: "power3.out",
+                });
 
-            gsap.to(".hero-floating-card-2", {
-                y: 7,
-                duration: 3.6,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut",
-            });
+                const yTo = gsap.quickTo(imageMouse, "y", {
+                    duration: 0.5,
+                    ease: "power3.out",
+                });
 
-            /* ============================================================
-               DASHBOARD HOVER
-            ============================================================ */
-
-            const dashboard = dashboardRef.current;
-
-            if (dashboard) {
                 const handleMove = (event) => {
-                    const rect = dashboard.getBoundingClientRect();
+                    const rect = imageWrap.getBoundingClientRect();
 
-                    const x = (event.clientX - rect.left) / rect.width - 0.5;
+                    if (!rect.width || !rect.height) return;
 
-                    const y = (event.clientY - rect.top) / rect.height - 0.5;
-
-                    gsap.to(dashboard, {
-                        rotateY: x * 3,
-                        rotateX: -y * 2,
-                        duration: 0.5,
-                        ease: "power3.out",
-                    });
+                    xTo(((event.clientX - rect.left) / rect.width - 0.5) * 3);
+                    yTo(((event.clientY - rect.top) / rect.height - 0.5) * 2);
                 };
 
                 const handleLeave = () => {
-                    gsap.to(dashboard, {
-                        rotateY: 0,
-                        rotateX: 0,
-                        duration: 0.7,
-                        ease: "power3.out",
-                    });
+                    xTo(0);
+                    yTo(0);
                 };
 
-                dashboard.addEventListener("mousemove", handleMove);
-                dashboard.addEventListener("mouseleave", handleLeave);
+                imageWrap.addEventListener("mousemove", handleMove);
+                imageWrap.addEventListener("mouseleave", handleLeave);
 
                 return () => {
-                    dashboard.removeEventListener("mousemove", handleMove);
-                    dashboard.removeEventListener("mouseleave", handleLeave);
+                    imageWrap.removeEventListener("mousemove", handleMove);
+                    imageWrap.removeEventListener("mouseleave", handleLeave);
                 };
             }
         }, section);
 
-        /* ============================================================
-           SUBTLE SCROLL PARALLAX
-        ============================================================ */
-
-        const parallax = gsap.to(".hero-visual", {
-            y: 80,
-            ease: "none",
-            scrollTrigger: {
-                trigger: section,
-                start: "top top",
-                end: "bottom top",
-                scrub: 1,
-            },
-        });
-
-        return () => {
-            ctx.revert();
-            parallax.kill();
-        };
+        return () => ctx.revert();
     }, []);
 
     return (
-        <section ref={sectionRef} className="relative min-h-screen overflow-hidden bg-[#F8F7F4] text-[#171715]">
-            {/* ============================================================
-          BACKGROUND
-      ============================================================ */}
+        <section
+            ref={sectionRef}
+            className="relative isolate overflow-hidden bg-[#111417] text-white pt-10 md:pt-20"
+        >
+            {/* BACKGROUND */}
 
-            <div className="pointer-events-none absolute inset-0">
-                {/* Main warm glow */}
-
-                <div className="absolute left-[20%] top-[-15%] h-[600px] w-[600px] rounded-full bg-[#B59A63]/[0.08] blur-[120px]" />
-
-                {/* Right glow */}
-
-                <div className="absolute right-[-10%] top-[30%] h-[500px] w-[500px] rounded-full bg-[#B59A63]/[0.05] blur-[100px]" />
-
-                {/* Fine grid */}
-
-                <div className="absolute inset-0 opacity-[0.35] [background-image:linear-gradient(rgba(23,23,21,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(23,23,21,0.035)_1px,transparent_1px)] [background-size:70px_70px] [mask-image:linear-gradient(to_bottom,black,transparent_80%)]" />
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0"
+            >
+                <div className="absolute left-0 top-0 h-24 w-24 border-l border-t border-[#B59A63]/10 sm:h-32 sm:w-32 lg:h-40 lg:w-40" />
+                <div className="absolute bottom-0 right-0 h-24 w-24 border-b border-r border-[#B59A63]/10 sm:h-32 sm:w-32 lg:h-40 lg:w-40" />
             </div>
 
-            {/* ============================================================
-          HERO CONTENT
-      ============================================================ */}
+            {/* MAIN CONTENT */}
 
-            <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1280px] flex-col justify-center px-5 pb-16 pt-20 sm:px-8 lg:px-10 lg:pb-20 lg:pt-22 xl:px-0">
-                <div className="grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
-                    {/* ========================================================
-              LEFT CONTENT
-          ======================================================== */}
+            <div className="relative z-10 mx-auto flex w-full max-w-[1540px] flex-col lg:min-h-[min(850px,calc(100svh-76px))] lg:flex-row lg:items-stretch">
+                {/* TEXT CONTENT */}
 
-                    <div className="relative z-20 max-w-[600px]">
-                        {/* Badge */}
-
-                        <div className="hero-badge mb-7">
-                            <div className="inline-flex items-center gap-2 rounded-full border border-[#B59A63]/25 bg-white/70 px-3.5 py-2 shadow-[0_4px_20px_rgba(23,23,21,0.04)] backdrop-blur-sm">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#B59A63] opacity-40" />
-
-                                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#B59A63]" />
-                                </span>
-
-                                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#55534D]">
-                                    Built for local businesses
-                                </span>
-                            </div>
+                <div className="relative z-10 flex min-w-0 w-full items-center px-5 pb-8 pt-24 min-[480px]:px-8 sm:pb-10 sm:pt-28 md:px-12 lg:w-[48%] lg:px-8 lg:py-16 xl:px-14 2xl:px-20">
+                    <div className="w-full max-w-[590px]">
+                        <div className="law-hero-eyebrow mb-5 inline-flex max-w-full items-center gap-2.5 border border-[#B59A63]/20 bg-white/[0.025] px-3 py-2 sm:mb-7 sm:gap-3 sm:px-4 sm:py-2.5">
+                            <span className="flex h-5 w-5 shrink-0 items-center justify-center border border-[#B59A63]/40">
+                                <Scale size={11} strokeWidth={1.5} className="text-[#C7A96B]" />
+                            </span>
+                            <span className="text-[8px] font-medium uppercase tracking-[0.16em] text-[#C7A96B] min-[380px]:text-[9px] sm:text-[10px] sm:tracking-[0.22em]">
+                                Advocates &amp; Legal Consultants
+                            </span>
                         </div>
 
-                        {/* Heading */}
-
-                        <h1 className="max-w-[650px] text-[48px] font-semibold leading-[0.98] tracking-[-0.055em] text-[#171715] sm:text-[64px] lg:text-[68px] xl:text-[76px]">
-                            <span className="hero-word block">
-                                Turn happy
+                        <h1 className="max-w-[650px] text-[clamp(2.6rem,7vw,5.1rem)] font-medium leading-[0.98] tracking-[-0.055em] text-white lg:text-[clamp(3rem,4.2vw,4.6rem)] xl:text-[clamp(3.5rem,4.3vw,5rem)]">
+                            <span className="law-hero-title-line block font-serif">
+                                Trusted counsel.
                             </span>
-
-                            <span className="hero-word block">
-                                customers into
+                            <span className="law-hero-title-line block font-serif">
+                                Strong
                             </span>
-
-                            <span className="hero-word block text-[#B59A63]">
-                                stronger reviews.
+                            <span className="law-hero-title-line block font-serif italic text-[#C7A96B]">
+                                representation.
                             </span>
                         </h1>
 
-                        {/* Description */}
+                        <div className="mt-5 flex items-center gap-3 sm:mt-7 sm:gap-4">
+                            <span className="h-px w-10 bg-[#B59A63] sm:w-14" />
+                            <span className="h-px w-4 bg-[#B59A63]/30 sm:w-5" />
+                        </div>
 
-                        <p className="hero-description mt-7 max-w-[540px] text-[15px] leading-7 text-[#77746D] sm:text-[16px]">
-                            Give customers an easy way to share their experience, collect private feedback, and make it simple for satisfied customers to leave a Google review.
+                        <p className="law-hero-description mt-5 max-w-[460px] text-[13px] leading-6 text-white/60 sm:mt-6 sm:text-[15px] sm:leading-7">
+                            Thoughtful legal guidance backed by experience,
+                            strategic counsel, and a commitment to protecting
+                            what matters most to you.
                         </p>
 
-                        {/* Actions */}
-
-                        <div className="hero-actions mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                            <Link href="/authr" className="group inline-flex h-12 items-center justify-center gap-2.5 rounded-xl bg-[#B59A63] px-6 text-[13px] font-semibold transition-all duration-300 hover:-translate-y-0.5">
-                                Start growing your reputation
-
-                                <ArrowRight size={16} strokeWidth={1.8} className="transition-transform duration-300 group-hover:translate-x-1" />
+                        <div className="law-hero-actions mt-6 flex w-full flex-col gap-3 min-[480px]:flex-row min-[480px]:items-center sm:mt-8">
+                            <Link
+                                href="/contact-us"
+                                className="group inline-flex min-h-12 w-full items-center justify-center gap-3 bg-[#B59A63] px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#111417] transition-colors duration-300 hover:bg-[#D0B77B] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C7A96B] min-[480px]:w-auto sm:px-6 sm:text-[11px]"
+                            >
+                                <span>Book a Consultation</span>
+                                <ArrowRight size={16} strokeWidth={1.8} className="shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
                             </Link>
 
-                            <Link href="#how-it-works" className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-black/[0.10] bg-white/70 px-5 text-[13px] font-medium text-[#33322F] backdrop-blur-sm transition-all duration-300 hover:border-black/20 hover:bg-white">
-                                See how it works
-
-                                <ArrowUpRight size={15} strokeWidth={1.7} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            <Link
+                                href="#practice-areas"
+                                className="group inline-flex min-h-12 w-full items-center justify-center gap-2 border border-white/15 px-5 py-3 text-[10px] font-medium uppercase tracking-[0.08em] text-white/85 transition-colors duration-300 hover:border-[#B59A63]/60 hover:bg-white/[0.04] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C7A96B] min-[480px]:w-auto sm:px-5 sm:text-[11px]"
+                            >
+                                <span>Explore Practice Areas</span>
+                                <ArrowUpRight size={15} strokeWidth={1.7} className="shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                             </Link>
                         </div>
 
-                        {/* Trust */}
-
-                        <div className="hero-trust mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 text-[11px] text-[#77746D]">
-                            <div className="flex items-center gap-2">
-                                <Check size={14} strokeWidth={2} className="text-[#B59A63]" />
-
-                                <span>No complicated setup</span>
-                            </div>
-
-                            <div className="h-3 w-px bg-black/10" />
-
-                            <div className="flex items-center gap-2">
-                                <Check size={14} strokeWidth={2} className="text-[#B59A63]" />
-
-                                <span>QR-powered feedback</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* ========================================================
-              RIGHT PRODUCT VISUAL
-          ======================================================== */}
-
-                    <div className="hero-visual relative flex min-h-[500px] items-center justify-center lg:min-h-[620px]">
-                        {/* Ambient circle */}
-
-                        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#B59A63]/10 sm:h-[520px] sm:w-[520px]" />
-
-                        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#B59A63]/[0.07] blur-[80px] sm:h-[400px] sm:w-[400px]" />
-
-                        {/* ======================================================
-                DASHBOARD
-            ======================================================= */}
-
-                        <div ref={dashboardRef} className="hero-dashboard relative z-10 w-full max-w-[610px] [transform-style:preserve-3d] [perspective:1200px]">
-                            <div className="overflow-hidden rounded-2xl border border-black/[0.09] bg-white shadow-[0_35px_90px_rgba(23,23,21,0.14)]">
-                                {/* Browser bar */}
-
-                                <div className="flex h-11 items-center justify-between border-b border-black/[0.07] bg-[#FBFAF8] px-4">
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="h-2.5 w-2.5 rounded-full bg-black/10" />
-                                        <span className="h-2.5 w-2.5 rounded-full bg-black/10" />
-                                        <span className="h-2.5 w-2.5 rounded-full bg-black/10" />
-                                    </div>
-
-                                    <div className="rounded-md bg-black/[0.035] px-8 py-1.5 text-[8px] text-[#A19E96]">
-                                        app.reviewflow.local
-                                    </div>
-
-                                    <div className="w-10" />
-                                </div>
-
-                                {/* Dashboard */}
-
-                                <div className="p-4 sm:p-6">
-                                    {/* Dashboard header */}
-
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-[#A19E96]">
-                                                Reputation overview
-                                            </p>
-
-                                            <h3 className="mt-1 text-[20px] font-semibold tracking-[-0.035em] text-[#171715]">
-                                                Your business
-                                            </h3>
-                                        </div>
-
-                                        <div className="rounded-lg border border-black/[0.07] bg-[#FBFAF8] px-3 py-2 text-[9px] font-medium text-[#77746D]">
-                                            Last 30 days
-                                        </div>
-                                    </div>
-
-                                    {/* Stats */}
-
-                                    <div className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
-                                        {/* Rating */}
-
-                                        <div className="rounded-xl border border-black/[0.07] bg-[#FBFAF8] p-3 sm:p-4">
-                                            <div className="flex items-center gap-1.5">
-                                                <Star size={13} fill="#B59A63" className="text-[#B59A63]" />
-
-                                                <span className="text-[8px] font-medium uppercase tracking-[0.08em] text-[#A19E96]">
-                                                    Rating
-                                                </span>
-                                            </div>
-
-                                            <div className="mt-2 text-[22px] font-semibold tracking-[-0.04em] text-[#171715]">
-                                                4.8
-                                            </div>
-
-                                            <div className="mt-1 text-[8px] text-[#5D8C69]">
-                                                +0.3 this month
-                                            </div>
-                                        </div>
-
-                                        {/* Reviews */}
-
-                                        <div className="rounded-xl border border-black/[0.07] bg-[#FBFAF8] p-3 sm:p-4">
-                                            <div className="flex items-center gap-1.5">
-                                                <MessageSquare size={13} className="text-[#B59A63]" />
-
-                                                <span className="text-[8px] font-medium uppercase tracking-[0.08em] text-[#A19E96]">
-                                                    Reviews
-                                                </span>
-                                            </div>
-
-                                            <div className="mt-2 text-[22px] font-semibold tracking-[-0.04em] text-[#171715]">
-                                                126
-                                            </div>
-
-                                            <div className="mt-1 text-[8px] text-[#5D8C69]">
-                                                +18 this month
-                                            </div>
-                                        </div>
-
-                                        {/* Growth */}
-
-                                        <div className="rounded-xl border border-black/[0.07] bg-[#FBFAF8] p-3 sm:p-4">
-                                            <div className="flex items-center gap-1.5">
-                                                <TrendingUp size={13} className="text-[#B59A63]" />
-
-                                                <span className="text-[8px] font-medium uppercase tracking-[0.08em] text-[#A19E96]">
-                                                    Growth
-                                                </span>
-                                            </div>
-
-                                            <div className="mt-2 text-[22px] font-semibold tracking-[-0.04em] text-[#171715]">
-                                                24%
-                                            </div>
-
-                                            <div className="mt-1 text-[8px] text-[#5D8C69]">
-                                                Review activity
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Chart */}
-
-                                    <div className="mt-3 rounded-xl border border-black/[0.07] bg-white p-4">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="text-[9px] font-medium text-[#77746D]">
-                                                    Review activity
-                                                </p>
-
-                                                <p className="mt-1 text-[17px] font-semibold tracking-[-0.03em]">
-                                                    18 new reviews
-                                                </p>
-                                            </div>
-
-                                            <span className="rounded-full bg-[#EEF5EE] px-2 py-1 text-[8px] font-medium text-[#5D8C69]">
-                                                +32%
-                                            </span>
-                                        </div>
-
-                                        {/* Fake chart */}
-
-                                        <div className="relative mt-5 h-[100px] overflow-hidden">
-                                            <div className="absolute inset-x-0 top-0 border-t border-dashed border-black/[0.06]" />
-
-                                            <div className="absolute inset-x-0 top-1/2 border-t border-dashed border-black/[0.06]" />
-
-                                            <div className="absolute inset-x-0 bottom-0 border-t border-dashed border-black/[0.06]" />
-
-                                            <svg viewBox="0 0 500 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
-                                                <defs>
-                                                    <linearGradient id="reviewGradient" x1="0" x2="0" y1="0" y2="1">
-                                                        <stop offset="0%" stopColor="#B59A63" stopOpacity="0.20" />
-
-                                                        <stop offset="100%" stopColor="#B59A63" stopOpacity="0" />
-                                                    </linearGradient>
-                                                </defs>
-
-                                                <path d="M0 80 C35 78 45 70 70 72 C95 74 105 58 130 62 C160 67 165 54 195 55 C220 56 230 45 255 48 C280 51 290 35 315 40 C345 45 355 28 380 31 C410 34 430 18 450 22 C470 26 485 12 500 8 L500 100 L0 100 Z" fill="url(#reviewGradient)" />
-
-                                                <path d="M0 80 C35 78 45 70 70 72 C95 74 105 58 130 62 C160 67 165 54 195 55 C220 56 230 45 255 48 C280 51 290 35 315 40 C345 45 355 28 380 31 C410 34 430 18 450 22 C470 26 485 12 500 8" fill="none" stroke="#B59A63" strokeWidth="2" />
-                                            </svg>
-                                        </div>
-                                    </div>
-
-                                    {/* Recent reviews */}
-
-                                    <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                                        <div className="rounded-xl border border-black/[0.07] bg-[#FBFAF8] p-3">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex gap-0.5">
-                                                    {[1, 2, 3, 4, 5].map((item) => (
-                                                        <Star key={item} size={9} fill="#B59A63" className="text-[#B59A63]" />
-                                                    ))}
-                                                </div>
-
-                                                <span className="text-[8px] text-[#A19E96]">
-                                                    Today
-                                                </span>
-                                            </div>
-
-                                            <p className="mt-2 text-[9px] leading-4 text-[#55534D]">
-                                                “Excellent service and very helpful staff.”
-                                            </p>
-                                        </div>
-
-                                        <div className="rounded-xl border border-black/[0.07] bg-[#FBFAF8] p-3">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex gap-0.5">
-                                                    {[1, 2, 3, 4, 5].map((item) => (
-                                                        <Star key={item} size={9} fill="#B59A63" className="text-[#B59A63]" />
-                                                    ))}
-                                                </div>
-
-                                                <span className="text-[8px] text-[#A19E96]">
-                                                    Yesterday
-                                                </span>
-                                            </div>
-
-                                            <p className="mt-2 text-[9px] leading-4 text-[#55534D]">
-                                                “Would definitely recommend this local business.”
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ======================================================
-                QR PHONE CARD
-            ======================================================= */}
-
-                        <div ref={phoneRef} className="hero-phone absolute bottom-[-20px] right-[-5px] z-30 w-[145px] sm:bottom-[-25px] sm:right-[15px] sm:w-[175px] lg:right-[-15px] xl:right-[-30px]">
-                            <div className="overflow-hidden rounded-[25px] border-[5px] border-[#171715] bg-white shadow-[0_25px_60px_rgba(23,23,21,0.20)]">
-                                <div className="p-3 sm:p-4">
-                                    {/* Mobile top */}
-
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[7px] font-semibold">
-                                            9:41
-                                        </span>
-
-                                        <div className="h-1.5 w-8 rounded-full bg-black/10" />
-
-                                        <span className="text-[6px] text-black/40">
-                                            ● ●
-                                        </span>
-                                    </div>
-
-                                    {/* Review request */}
-
-                                    <div className="mt-6 text-center">
-                                        <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#F8F7F4]">
-                                            <Star size={18} fill="#B59A63" className="text-[#B59A63]" />
-                                        </div>
-
-                                        <p className="mt-3 text-[11px] font-semibold tracking-[-0.02em]">
-                                            How was your visit?
-                                        </p>
-
-                                        <p className="mt-1 text-[7px] leading-3 text-[#77746D]">
-                                            Your feedback helps this business improve.
-                                        </p>
-                                    </div>
-
-                                    {/* Stars */}
-
-                                    <div className="mt-4 flex justify-center gap-1">
-                                        {[1, 2, 3, 4, 5].map((item) => (
-                                            <div key={item} className="flex h-6 w-6 items-center justify-center rounded-md bg-[#F8F7F4]">
-                                                <Star size={10} className="text-[#B59A63]" />
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <button type="button" className="mt-4 flex h-8 w-full items-center justify-center rounded-lg bg-[#171715] text-[7px] font-semibold text-white">
-                                        Leave feedback
-                                    </button>
-
-                                    <div className="mt-4 flex items-center justify-center gap-1">
-                                        <QrCode size={10} className="text-[#B59A63]" />
-
-                                        <span className="text-[6px] text-[#A19E96]">
-                                            Powered by ReviewFlow
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ======================================================
-                FLOATING CARD — QR
-            ======================================================= */}
-
-                        <div className="hero-floating-card hero-floating-card-1 absolute left-[-5px] top-[12%] z-30 hidden rounded-xl border border-black/[0.08] bg-white/95 p-3 shadow-[0_15px_40px_rgba(23,23,21,0.10)] backdrop-blur-md sm:block">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F8F7F4]">
-                                    <QrCode size={17} className="text-[#B59A63]" />
-                                </div>
-
-                                <div>
-                                    <p className="text-[9px] font-semibold">
-                                        Scan & share
+                        <div className="law-hero-trust mt-8 grid w-full max-w-[510px] grid-cols-1 border-t border-white/10 pt-5 min-[480px]:grid-cols-2 sm:mt-10 sm:pt-6">
+                            <div className="flex items-center gap-3 border-b border-white/10 pb-4 min-[480px]:border-b-0 min-[480px]:border-r min-[480px]:pr-4 min-[480px]:pb-0">
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-[#B59A63]/25">
+                                    <ShieldCheck size={15} strokeWidth={1.5} className="text-[#C7A96B]" />
+                                </span>
+                                <div className="min-w-0">
+                                    <p className="text-[9px] font-medium uppercase tracking-[0.1em] text-white/75 sm:text-[10px]">
+                                        Confidential
                                     </p>
-
-                                    <p className="mt-0.5 text-[8px] text-[#A19E96]">
-                                        Simple customer feedback
+                                    <p className="mt-1 text-[9px] text-white/45 sm:text-[10px]">
+                                        Discreet legal counsel
                                     </p>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* ======================================================
-                FLOATING CARD — REVIEW
-            ======================================================= */}
-
-                        <div className="hero-floating-card hero-floating-card-2 absolute bottom-[12%] left-[2%] z-30 hidden rounded-xl border border-black/[0.08] bg-white/95 p-3 shadow-[0_15px_40px_rgba(23,23,21,0.10)] backdrop-blur-md sm:block">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F8F7F4]">
-                                    <Star size={17} fill="#B59A63" className="text-[#B59A63]" />
-                                </div>
-
-                                <div>
-                                    <div className="flex items-center gap-1">
-                                        <span className="text-[12px] font-semibold">
-                                            4.8
-                                        </span>
-
-                                        <div className="flex gap-0.5">
-                                            {[1, 2, 3, 4, 5].map((item) => (
-                                                <Star key={item} size={7} fill="#B59A63" className="text-[#B59A63]" />
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <p className="mt-0.5 text-[8px] text-[#A19E96]">
-                                        Stronger reputation
+                            <div className="mt-4 flex items-center gap-3 min-[480px]:mt-0 min-[480px]:pl-4 sm:pl-5">
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-[#B59A63]/25">
+                                    <Sparkles size={14} strokeWidth={1.5} className="text-[#C7A96B]" />
+                                </span>
+                                <div className="min-w-0">
+                                    <p className="text-[9px] font-medium uppercase tracking-[0.1em] text-white/75 sm:text-[10px]">
+                                        Strategic
+                                    </p>
+                                    <p className="mt-1 text-[9px] text-white/45 sm:text-[10px]">
+                                        Focused legal solutions
                                     </p>
                                 </div>
                             </div>
-                        </div>
-
-                        {/* ======================================================
-                DECORATIVE LABEL
-            ======================================================= */}
-
-                        <div className="absolute right-0 top-[7%] hidden items-center gap-3 lg:flex">
-                            <span className="text-[8px] font-medium uppercase tracking-[0.25em] text-[#A19E96]">
-                                Reputation
-                            </span>
-
-                            <span className="h-px w-8 bg-black/10" />
                         </div>
                     </div>
                 </div>
+
+                {/* LARGE, RESPONSIVE IMAGE */}
+
+                <div
+                    ref={imageWrapRef}
+                    className="relative mx-auto h-[105vw] max-h-[620px] min-h-[360px] w-full min-w-0 max-w-[620px] overflow-hidden sm:h-[78vw] sm:min-h-[460px] md:h-[68vw] md:min-h-[520px] lg:mx-0 lg:h-auto lg:max-h-none lg:min-h-0 lg:w-[52%] lg:max-w-none"
+                >
+                    <div
+                        ref={imageParallaxRef}
+                        className="absolute inset-0 will-change-transform"
+                    >
+                        <div
+                            ref={imageMouseRef}
+                            className="absolute inset-0 will-change-transform"
+                        >
+                            <Image
+                                src="/heromain1.png"
+                                alt="Legal professional representing a law firm"
+                                fill
+                                priority
+                                sizes="(max-width: 639px) 100vw, (max-width: 1023px) 100vw, 52vw"
+                                className="object-cover object-[center_25%]"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#111417]/35 to-transparent lg:hidden"
+                    />
+                </div>
             </div>
 
-            {/* ============================================================
-          BOTTOM FADE
-      ============================================================ */}
+            {/* SCROLL INDICATOR */}
 
-            <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 h-32 bg-gradient-to-t from-[#F8F7F4] to-transparent" />
+            <div className="law-hero-scroll pointer-events-none absolute bottom-6 left-5 z-30 hidden items-center gap-4 sm:flex md:left-8 lg:left-10 xl:left-14 2xl:left-20">
+                <span className="text-[8px] font-medium uppercase tracking-[0.25em] text-white/40">
+                    Scroll to explore
+                </span>
+                <span className="h-px w-10 bg-white/25 sm:w-14" />
+            </div>
+
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 h-px bg-[#B59A63]/40" />
         </section>
     );
 };
